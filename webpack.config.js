@@ -8,8 +8,8 @@ var config = {
   context: __dirname,
   devtool: 'eval-source-map',
   entry: [
-    'webpack-dev-server/client?http://localhost:3000', 
-    'webpack/hot/dev-server', 
+    'webpack-dev-server/client?http://localhost:3000',
+    'webpack/hot/dev-server',
     path.resolve(appPath, 'main.js')],
   output: {
     path: buildPath,
@@ -17,14 +17,20 @@ var config = {
     publicPath: '/build/'
   },
   module: {
-    loaders: [{
-      test: /\.js$/,
-      loader: 'babel',
-      exclude: [nodeModulesPath]
-    }, {
-      test: /\.css$/,
-      loader: 'style!css'
-    }]
+    loaders: [
+      {
+        test: /\.js$/,
+        loader: 'babel',
+        exclude: [nodeModulesPath]
+      }, {
+        test: /\.css$/,
+        loader: 'style!css'
+      },
+      {
+        test: /\.json$/,
+        loader: "json"
+      }
+    ]
   },
   plugins: [new Webpack.HotModuleReplacementPlugin()]
 };
