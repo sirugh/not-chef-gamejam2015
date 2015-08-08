@@ -3,6 +3,7 @@ var Player = function(game, controller, name) {
   this.name = name;
   this.controller = controller;
   this.inventory = null;
+  this.choice = undefined;
 }
 
 Player.prototype.populateInventory = function (constructSprite) {
