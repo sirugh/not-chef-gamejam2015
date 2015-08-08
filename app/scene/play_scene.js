@@ -5,8 +5,6 @@ var imageA, imageB, imageX, imageY;
 var buttonA, buttonB, buttonX, buttonY;
 
 function addButtons (pad) {
-  console.log('in addButtons');
-  console.log('addPad = %s', JSON.stringify(pad))
   //  We can't do this until we know that the gamepad has been connected and is started
   buttonA = pad.getButton(Phaser.Gamepad.XBOX360_A);
   buttonB = pad.getButton(Phaser.Gamepad.XBOX360_B);
