@@ -6,7 +6,7 @@ var Player = function(game, name) {
 }
 
 Player.prototype.populateInventory = function (constructSprite) {
-  this.inventory = _.map(play.chooseIngredients(5), function(name) {
+  this.inventory = _.map(play.chooseIngredients(4), function(name) {
     return {
       name : name,
       sprite : constructSprite(name)

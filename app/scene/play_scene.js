@@ -71,7 +71,7 @@ var PlayScene = {
 
     player1.populateInventory(function (text) {
       var sprite = game.add.text(0, 0, text);
-      sprite.anchor.setTo(.5, .5);
+      sprite.anchor.setTo(0,.5);
       return sprite;
     });
 
@@ -79,7 +79,7 @@ var PlayScene = {
     player2 = new Player(game, 'player2');
     player2.populateInventory(function (text) {
       var sprite = game.add.text(0, 0, text);
-      sprite.anchor.setTo(.5, .5);
+      sprite.anchor.setTo(1,.5);
       return sprite;
     });
 
@@ -89,15 +89,6 @@ var PlayScene = {
     window.plates = plates;
 
     //// Set up GUI
-
-    //  Add a sprite
-    sprite = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'select');
-    sprite.anchor.setTo(0.5, 0.5);
-    sprite.originX = this.game.world.centerX;
-    sprite.originY = this.game.world.centerY;
-    sprite.xDif = 0;
-    sprite.yDif = 0;
-
     SUSPEND = false;
 
     cursors = this.game.input.keyboard.createCursorKeys();
@@ -113,7 +104,7 @@ var PlayScene = {
 
   update : function () {
     var game = this.game;
-
+    var self = this;
     while(plates.length < MAX_PLATES) {
       // add plates
       var sprite = this.game.add.sprite(this.game.width / 2,
@@ -128,9 +119,13 @@ var PlayScene = {
 
     // Wrap this in some conditional
     players[0].inventory.forEach(function(food, i) {
-      var coords = getCoords(game, i);
-      food.sprite.x = coords[0];
-      food.sprite.y = coords[1];
+      food.sprite.x = 10;
+      food.sprite.y = i * food.sprite.height + self.world.height/2;
+    });
+
+    players[1].inventory.forEach(function (food, i) {
+      food.sprite.x = self.world.width - 10;
+      food.sprite.y = i * food.sprite.height + self.world.height/2;
     });
 
     // TODO: Put something here.
