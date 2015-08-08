@@ -46,7 +46,7 @@ var PlayScene = {
     window.plates = plates;
 
     play.populateInventory(players);
-    
+
     //// Set up GUI
 
     //  Add a sprite
@@ -58,17 +58,20 @@ var PlayScene = {
     sprite.yDif = 0;
     //sprite.scale = {"x":.4, "y":.4};
 
-    plate1 = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'plate1');
-    plate1.anchor.setTo(.5, .5);
+    var guiPlayer = players[0];
 
-    plate2 = this.game.add.sprite(this.game.world.centerX + GRID_SIZE, this.game.world.centerY, 'plate2');
-    plate2.anchor.setTo(.5, .5);
+    addFood(guiPlayer.inventory[0], this.game.world.centerX, this.game.world.centerY);
+    addFood(guiPlayer.inventory[1], this.game.world.centerX + GRID_SIZE, this.game.world.centerY);
+    addFood(guiPlayer.inventory[2], this.game.world.centerX, this.game.world.centerY + GRID_SIZE);
+    addFood(guiPlayer.inventory[3], this.game.world.centerX + GRID_SIZE, this.game.world.centerY + GRID_SIZE);
 
-    plate3 = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY + GRID_SIZE, 'plate3');
-    plate3.anchor.setTo(.5, .5);
+    foods[0] = [guiPlayer.inventory[0], guiPlayer.inventory[1]];
+    foods[1] = [guiPlayer.inventory[2], guiPlayer.inventory[3]];
 
-    plate4 = this.game.add.sprite(this.game.world.centerX + GRID_SIZE, this.game.world.centerY + GRID_SIZE, 'plate4');
-    plate4.anchor.setTo(.5, .5);
+    function addFood (name, x, y) {
+      var food = game.add.text(x, y, name);
+      food.anchor.setTo(.5, .5);
+    }
 
     text = this.game.add.text(20, 20, 'move with arrow keys', { fill: '#ffffff' });
 
@@ -84,7 +87,7 @@ var PlayScene = {
     cursors = this.game.input.keyboard.createCursorKeys();
     keyboard = this.game.input.keyboard;
     keyboard.onUpCallback = keyboardEventHandler;
-    
+
     //// End GUI setup
   },
 
@@ -94,7 +97,7 @@ var PlayScene = {
       plates.push(play.createPlate(4 - players.length));
       console.log(plates);
     }
-    
+
     // TODO: Put something here.
     if(SUSPEND) {
       //remove usual keyboard listeners
@@ -133,7 +136,7 @@ function keyboardEventHandler(event) {
   if(event.keyIdentifier === "Enter") {
     //create a food and send it off into the distance
     var foodName = foods[sprite.yDif][sprite.xDif];
-    var newFood = this.game.add.sprite(0, this.game.world.bounds.height, foodName);
+    var newFood = this.game.add.text(0, this.game.world.bounds.height, foodName);
     newFood.anchor.set(.5, .5);
 
     var tween = this.game.add.tween(newFood, this.game, this.game.tweens);

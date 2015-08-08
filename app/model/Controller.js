@@ -23,6 +23,12 @@ Controller.prototype.addButtons = function () {
     this.imageX = game.add.image(400, 200, 'xbox360', '360_X');
     this.imageY = game.add.image(500, 100, 'xbox360', '360_Y');
   }
+
+  this.imageA.alpha = 0;
+  this.imageB.alpha = 0;
+  this.imageX.alpha = 0;
+  this.imageY.alpha = 0;
+
   //  We can't do this until we know that the gamepad has been connected and is started
   this.buttonA = this.device.getButton(Phaser.Gamepad.XBOX360_A);
   this.buttonB = this.device.getButton(Phaser.Gamepad.XBOX360_B);
