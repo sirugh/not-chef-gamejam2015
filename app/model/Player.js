@@ -1,5 +1,6 @@
 var play = require('../engine/play');
 var Player = function(game, controller, name) {
+
   this.name = name;
   this.controller = controller;
   this.inventory = null;
