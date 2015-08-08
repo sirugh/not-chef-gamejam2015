@@ -15,17 +15,18 @@ Player.prototype.populateInventory = function (constructSprite) {
 }
 
 Player.prototype.addIngredient = function (food, plate) {
-  this.removeFromInventory(this.inventory, food);
+  this.removeFromInventory(food);
   plate.foods.push(food.name);
   plate.update();
 }
 
-Player.prototype.removeFromInventory = function (inventory, food) {
-  food.sprite.alpha = .1;
+Player.prototype.removeFromInventory = function (food) {
+  food.sprite.alpha = 0;
+  var index = _(this.inventory).findIndex({name : food.name});
+  this.inventory.splice(index, 1);
 }
 
 Player.prototype.choose = function (index) {
-  // var foodIndex = getIndex(sprite.xDif, sprite.yDif);
   var food = this.inventory[index];
   this.addIngredient(food, plates[0]);
   console.log('%s selected %s', this.name, food.name);
