@@ -19,8 +19,12 @@ module.exports = {
   },
 
   addIngredient : function (player, ingredient, plate) {
-    player.inventory = _.omit(player.inventory, ingredient);
+    player.inventory = _.without(player.inventory, ingredient);
     plate.push(ingredient);
+  },
+
+  createPlate : function (count) {
+    return this.chooseIngredients(count);
   },
 
   ratePlate : function (ingredients) {
@@ -33,19 +37,20 @@ module.exports = {
     var multipliers = {};
 
     foods.combos.forEach( function (combo) {
-     var a = combo[0];
-     var b = combo[1];
-     var bonus = combo[2];
+      var a = combo[0];
+      var b = combo[1];
+      var bonus = combo[2];
 
-     if(bonus < 1) {
-      bonus = bonus * 5;
-     }
+      if (ingredients.indexOf(a) !== -1 &&
+          ingredients.indexOf(b) !== -1) {
 
-     if (ingredients.indexOf(a) !== -1 &&
-         ingredients.indexOf(b) !== -1) {
-      multipliers[a] = (multipliers[a] || 1) + bonus;
-      multipliers[b] = (multipliers[b] || 1) + bonus;
-     }
+        if(bonus < 0) {
+          bonus = bonus * 5;
+        }
+
+        multipliers[a] = (multipliers[a] || 1) + bonus;
+        multipliers[b] = (multipliers[b] || 1) + bonus;
+      }
     });
 
     ingredients.forEach( function (ingredient) {
@@ -62,23 +67,28 @@ module.exports = {
   },
 
   populateInventory : function (player) {
+    player.inventory = this.chooseIngredients(5);
+  },
+
+  chooseIngredients : function (count) {
     var possibleIngredients = foods.getIngredients();
-    var inventory = [];
+    var ingredients = [];
     var index;
     var ingredient;
 
-    while(inventory.length < 5) {
+    while(ingredients.length < count) {
       index = Math.floor(Math.random() * possibleIngredients.length);
       ingredient = possibleIngredients[index];
       possibleIngredients.splice(index, 1);
-      inventory.push(ingredient);
+      ingredients.push(ingredient);
     }
 
-    player.inventory = inventory;
+    return ingredients;
   }
 }
 
 window.ratePlate = module.exports.ratePlate;
 window.testRatePlate = module.exports.testRatePlate;
+window.addIngredient = module.exports.addIngredient;
 
 
