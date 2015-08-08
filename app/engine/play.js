@@ -19,12 +19,6 @@ module.exports = {
     printScore(['chicken', 'gravy', 'lettuce']);
   },
 
-  addIngredient : function (player, food, plate) {
-    this.removeFromInventory(player.inventory, food);
-    plate.foods.push(food.name);
-    plate.update();
-  },
-
   createPlate : function (sprite, count) {
     return new Plate(this.chooseIngredients(count), sprite);
   },
@@ -65,20 +59,6 @@ module.exports = {
   createPlayer : function () {
     var player = { };
     return player;
-  },
-
-  populateInventory : function (player, constructSprite) {
-    player.inventory = _.map(this.chooseIngredients(5), function(name) {
-
-      return {
-        name : name,
-        sprite : constructSprite(name)
-      }
-    });
-  },
-
-  removeFromInventory : function (inventory, food) {
-    food.sprite.alpha = .1;
   },
 
   chooseIngredients : function (count) {

@@ -53,12 +53,12 @@ var PlayScene = {
     var pad2 = game.input.gamepad.pad2;
     player2 = new Player(game, new Controller(game, pad2), 'player2');
 
-    players.push(play.createPlayer());
-    players.push(play.createPlayer());
+    players.push(player1);
+    players.push(player2);
     window.players = players;
     window.plates = plates;
 
-    play.populateInventory(players[0], function (text) {
+    player1.populateInventory(function (text) {
      var sprite = game.add.text(0, 0, text);
       sprite.anchor.setTo(.5, .5);
       return sprite;
@@ -149,7 +149,7 @@ function keyboardEventHandler(event) {
     var foodIndex = getIndex(sprite.xDif, sprite.yDif);
     var food = players[0].inventory[foodIndex];
 
-    play.addIngredient(players[0], food, plates[0]);
+    players[0].addIngredient(food, plates[0]);
 
     /*var tween = this.game.add.tween(newFood, this.game, this.game.tweens);
     tween.to({
