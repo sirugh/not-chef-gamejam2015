@@ -4,6 +4,8 @@ var pad2;
 var imageA, imageB, imageX, imageY;
 var buttonA, buttonB, buttonX, buttonY;
 
+var foods = require('../data/foods.js');
+
 function addButtons (pad) {
   //  We can't do this until we know that the gamepad has been connected and is started
   buttonA = pad.getButton(Phaser.Gamepad.XBOX360_A);
@@ -26,40 +28,92 @@ function onDown (button, value) {
 
   if (button.buttonCode === Phaser.Gamepad.XBOX360_A)
   {
-      imageA.alpha = 0.5;
+    imageA.alpha = 0.5;
   }
   else if (button.buttonCode === Phaser.Gamepad.XBOX360_B)
   {
-      imageB.alpha = 0.5;
+    imageB.alpha = 0.5;
   }
   else if (button.buttonCode === Phaser.Gamepad.XBOX360_X)
   {
-      imageX.alpha = 0.5;
+    imageX.alpha = 0.5;
   }
   else if (button.buttonCode === Phaser.Gamepad.XBOX360_Y)
   {
-      imageY.alpha = 0.5;
+    imageY.alpha = 0.5;
   }
 }
 
 function onUp (button, value) {
   if (button.buttonCode === Phaser.Gamepad.XBOX360_A)
   {
-      imageA.alpha = 1;
+    imageA.alpha = 1;
   }
   else if (button.buttonCode === Phaser.Gamepad.XBOX360_B)
   {
-      imageB.alpha = 1;
+    imageB.alpha = 1;
   }
   else if (button.buttonCode === Phaser.Gamepad.XBOX360_X)
   {
-      imageX.alpha = 1;
+    imageX.alpha = 1;
   }
   else if (button.buttonCode === Phaser.Gamepad.XBOX360_Y)
   {
-      imageY.alpha = 1;
+    imageY.alpha = 1;
   }
 }
+
+function testRatePlate () {
+  function printScore(ingredients) {
+    var score = ratePlate(ingredients);
+    console.log(ingredients + ': ' + score);
+  }
+
+  printScore(['lettuce', 'tomato', 'cheese']);
+  printScore(['peanut butter', 'banana']);
+  printScore(['fish', 'lettuce', 'caviar']);
+  printScore(['cheese', 'caviar', 'fish']);
+  printScore(['gravy', 'chicken', 'fish']);
+  printScore(['peanut butter', 'gravy', 'cheese', 'lettuce']);
+  printScore(['chicken', 'gravy', 'lettuce']);
+}
+
+function ratePlate (ingredients) {
+  // Add base point value for plate
+  // Add combos
+
+  var multiplier = 1;
+  var score = 0;
+
+  var multipliers = {};
+
+  foods.forEach( function (combo) {
+   var a = combo[0];
+   var b = combo[1];
+   var bonus = combo[2];
+
+   if(bonus < 1) {
+    bonus = bonus * 5;
+   }
+
+   if (ingredients.indexOf(a) !== -1 &&
+       ingredients.indexOf(b) !== -1) {
+    multipliers[a] = (multipliers[a] || 1) + bonus;
+    multipliers[b] = (multipliers[b] || 1) + bonus;
+   }
+  });
+
+  ingredients.forEach( function (ingredient) {
+    score += 10 * (multipliers[ingredient] || 1);
+  });
+
+  return score;
+}
+
+window.ratePlate = ratePlate;
+window.testRatePlate = testRatePlate;
+
+var sprite, text, cursors;
 
 var PlayScene = {
   preload : function () {
@@ -86,6 +140,6 @@ var PlayScene = {
 
   update : function () {
   }
-}
+};
 
 module.exports = PlayScene;
