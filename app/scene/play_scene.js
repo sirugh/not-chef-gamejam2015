@@ -3,7 +3,7 @@ var pad1;
 
 var play = require('../engine/play.js');
 var Player = require('../model/Player');
-var player1;
+var player1, player2;
 
 var sprite, text, cursors;
 var players = [];
@@ -22,7 +22,11 @@ var PlayScene = {
 
     // add player 1
     var pad1 = game.input.gamepad.pad1;
-    player1 = new Player(game, pad1);
+    player1 = new Player(game, pad1, 'player1');
+
+    //add player 2
+    var pad2 = game.input.gamepad.pad2;
+    player2 = new Player(game, pad2, 'player2');
 
     players.push(play.createPlayer());
     players.push(play.createPlayer());
