@@ -56,11 +56,6 @@ module.exports = {
     return score;
   },
 
-  createPlayer : function () {
-    var player = { };
-    return player;
-  },
-
   chooseIngredients : function (count) {
     var possibleIngredients = foods.getIngredients();
     var ingredients = [];
