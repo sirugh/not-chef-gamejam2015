@@ -72,7 +72,7 @@ var PlayScene = {
     window.plates = plates;
 
     player1.populateInventory(function (text) {
-     var sprite = game.add.text(0, 0, text);
+      var sprite = game.add.text(0, 0, text);
       sprite.anchor.setTo(.5, .5);
       return sprite;
     });

@@ -21,13 +21,8 @@ Controller.prototype.addButtons = function () {
   this.imageA.alpha = 0;
 
   //  We can't do this until we know that the gamepad has been connected and is started
-  console.log(this.device);
   this.buttonA = this.device.getButton(Phaser.Gamepad.XBOX360_A);
-  console.log(this.buttonA.onDown.toString())
   this.buttonA.onDown.add(onDown, this);
-  window.buttonA = this.buttonA
-  console.log(this.buttonA.onDown.toString())
-  console.log('ondown: ', onDown.toString())
   this.buttonA.onUp.add(onUp, this);
 }
 
