@@ -7,7 +7,7 @@ var timerText;
 var plate1, plate2, plate3, plate4, selectSquare, splash, splashtext;
 var keyboard;
 
-var sprite, cursors;
+var sprite;
 var players = [];
 var plates = [];
 var foods = [
@@ -64,11 +64,8 @@ var PlayScene = {
     conveyor.y = this.game.height - conveyor.height + 3;
     conveyor.x = this.game.width / 2;
 
-    game.input.gamepad.start();
-
     // add player 1
     player1 = new Player(game, 'player1');
-
     player1.populateInventory(function (text) {
       var sprite = game.add.text(0, 0, text);
       sprite.anchor.setTo(0,.5);
@@ -91,7 +88,6 @@ var PlayScene = {
     //// Set up GUI
     SUSPEND = false;
 
-    cursors = this.game.input.keyboard.createCursorKeys();
     keyboard = this.game.input.keyboard;
     keyboard.onUpCallback = keyboardEventHandler;
 
