@@ -3,6 +3,9 @@
 // CSS
 require('./main.css');
 
+// Dependencies
+global._ = require('underscore');
+
 // globals
 global.PIXI = require('pixi.js'); //.js, not just pixi
 global.p2 = require('p2');

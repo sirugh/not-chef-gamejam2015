@@ -1,56 +1,95 @@
 'use strict';
+var pad1;
+var pad2;
+var imageA, imageB, imageX, imageY;
+var buttonA, buttonB, buttonX, buttonY;
 
-var sprite, text, cursors;
+function addButtons (pad) {
+  console.log('in addButtons');
+  console.log('addPad = %s', JSON.stringify(pad))
+  //  We can't do this until we know that the gamepad has been connected and is started
+  buttonA = pad.getButton(Phaser.Gamepad.XBOX360_A);
+  buttonB = pad.getButton(Phaser.Gamepad.XBOX360_B);
+  buttonX = pad.getButton(Phaser.Gamepad.XBOX360_X);
+  buttonY = pad.getButton(Phaser.Gamepad.XBOX360_Y);
+
+  buttonA.onDown.add(onDown, this);
+  buttonB.onDown.add(onDown, this);
+  buttonX.onDown.add(onDown, this);
+  buttonY.onDown.add(onDown, this);
+
+  buttonA.onUp.add(onUp, this);
+  buttonB.onUp.add(onUp, this);
+  buttonX.onUp.add(onUp, this);
+  buttonY.onUp.add(onUp, this);
+}
+
+function onDown (button, value) {
+
+  if (button.buttonCode === Phaser.Gamepad.XBOX360_A)
+  {
+      imageA.alpha = 0.5;
+  }
+  else if (button.buttonCode === Phaser.Gamepad.XBOX360_B)
+  {
+      imageB.alpha = 0.5;
+  }
+  else if (button.buttonCode === Phaser.Gamepad.XBOX360_X)
+  {
+      imageX.alpha = 0.5;
+  }
+  else if (button.buttonCode === Phaser.Gamepad.XBOX360_Y)
+  {
+      imageY.alpha = 0.5;
+  }
+}
+
+function onUp (button, value) {
+  if (button.buttonCode === Phaser.Gamepad.XBOX360_A)
+  {
+      imageA.alpha = 1;
+  }
+  else if (button.buttonCode === Phaser.Gamepad.XBOX360_B)
+  {
+      imageB.alpha = 1;
+  }
+  else if (button.buttonCode === Phaser.Gamepad.XBOX360_X)
+  {
+      imageX.alpha = 1;
+  }
+  else if (button.buttonCode === Phaser.Gamepad.XBOX360_Y)
+  {
+      imageY.alpha = 1;
+  }
+}
+
 var PlayScene = {
-
-  create: function () {
-
-    //  Enable p2 physics
-    this.game.physics.startSystem(Phaser.Physics.P2JS);
-
-    //  Make things a bit more bouncey
-    this.game.physics.p2.defaultRestitution = 0.8;
-
-    //  Add a sprite
-    sprite = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'logo');
-    sprite.anchor.setTo(0.5, 0.5);
-
-    //  Enable if for physics. This creates a default rectangular body.
-    this.game.physics.p2.enable(sprite);
-
-    //  Modify a few body properties
-    sprite.body.setZeroDamping();
-    sprite.body.fixedRotation = true;
-
-    text = this.game.add.text(20, 20, 'move with arrow keys', { fill: '#ffffff' });
-
-    cursors = this.game.input.keyboard.createCursorKeys();
-
+  preload : function () {
+    var game = this.game;
+    game.load.atlas('xbox360', 'assets/controllers/xbox360.png', 'assets/controllers/xbox360.json');
   },
 
-  update: function () {
+  create : function () {
+    var game = this.game;
+    game.stage.backgroundColor = '#2d2d2d';
 
-    sprite.body.setZeroVelocity();
+    //  Add some images
+    imageA = game.add.image(500, 300, 'xbox360', '360_A');
+    imageB = game.add.image(600, 200, 'xbox360', '360_B');
+    imageX = game.add.image(400, 200, 'xbox360', '360_X');
+    imageY = game.add.image(500, 100, 'xbox360', '360_Y');
 
-    if (cursors.left.isDown)
-    {
-      sprite.body.moveLeft(400);
-    }
-    else if (cursors.right.isDown)
-    {
-      sprite.body.moveRight(400);
-    }
+    game.input.gamepad.start();
 
-    if (cursors.up.isDown)
-    {
-      sprite.body.moveUp(400);
-    }
-    else if (cursors.down.isDown)
-    {
-      sprite.body.moveDown(400);
-    }
+    pad1 = game.input.gamepad.pad1;
+    pad2 = game.input.gamepad.pad2;
 
+    pad1.addCallbacks(this, { onConnect: _.partial(addButtons, pad1) });
+    pad2.addCallbacks(this, { onConnect: _.partial(addButtons, pad2) });
+  },
+
+  update : function () {
   }
-};
+}
 
 module.exports = PlayScene;
