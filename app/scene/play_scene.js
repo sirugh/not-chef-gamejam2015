@@ -4,7 +4,7 @@ var pad2;
 var imageA, imageB, imageX, imageY;
 var buttonA, buttonB, buttonX, buttonY;
 
-var foods = require('../data/foods.js');
+var play = require('../engine/play.js');
 
 function addButtons (pad) {
   //  We can't do this until we know that the gamepad has been connected and is started
@@ -63,57 +63,8 @@ function onUp (button, value) {
   }
 }
 
-function testRatePlate () {
-  function printScore(ingredients) {
-    var score = ratePlate(ingredients);
-    console.log(ingredients + ': ' + score);
-  }
-
-  printScore(['lettuce', 'tomato', 'cheese']);
-  printScore(['peanut butter', 'banana']);
-  printScore(['fish', 'lettuce', 'caviar']);
-  printScore(['cheese', 'caviar', 'fish']);
-  printScore(['gravy', 'chicken', 'fish']);
-  printScore(['peanut butter', 'gravy', 'cheese', 'lettuce']);
-  printScore(['chicken', 'gravy', 'lettuce']);
-}
-
-function ratePlate (ingredients) {
-  // Add base point value for plate
-  // Add combos
-
-  var multiplier = 1;
-  var score = 0;
-
-  var multipliers = {};
-
-  foods.forEach( function (combo) {
-   var a = combo[0];
-   var b = combo[1];
-   var bonus = combo[2];
-
-   if(bonus < 1) {
-    bonus = bonus * 5;
-   }
-
-   if (ingredients.indexOf(a) !== -1 &&
-       ingredients.indexOf(b) !== -1) {
-    multipliers[a] = (multipliers[a] || 1) + bonus;
-    multipliers[b] = (multipliers[b] || 1) + bonus;
-   }
-  });
-
-  ingredients.forEach( function (ingredient) {
-    score += 10 * (multipliers[ingredient] || 1);
-  });
-
-  return score;
-}
-
-window.ratePlate = ratePlate;
-window.testRatePlate = testRatePlate;
-
 var sprite, text, cursors;
+var players = [];
 
 var PlayScene = {
   preload : function () {
@@ -136,6 +87,11 @@ var PlayScene = {
 
     pad1.addCallbacks(this, { onConnect: _.partial(addButtons, pad1) });
     pad2.addCallbacks(this, { onConnect: _.partial(addButtons, pad2) });
+
+    players.push(play.createPlayer());
+    players.push(play.createPlayer());
+
+    play.populateInventory(players);
   },
 
   update : function () {
