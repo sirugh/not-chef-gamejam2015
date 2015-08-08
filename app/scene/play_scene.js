@@ -63,8 +63,6 @@ function onUp (button, value) {
 
 var PlayScene = {
   preload : function () {
-    var game = this.game;
-    game.load.atlas('xbox360', 'assets/controllers/xbox360.png', 'assets/controllers/xbox360.json');
   },
 
   create : function () {
