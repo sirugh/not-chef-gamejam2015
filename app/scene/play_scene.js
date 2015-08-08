@@ -7,6 +7,8 @@ var player1;
 
 var sprite, text, cursors;
 var players = [];
+var plates = [];
+var MAX_PLATES = 1;
 
 var PlayScene = {
   preload : function () {
@@ -24,11 +26,18 @@ var PlayScene = {
 
     players.push(play.createPlayer());
     players.push(play.createPlayer());
+    window.players = players;
+    window.plates = plates;
 
     play.populateInventory(players);
   },
 
   update : function () {
+    while(plates.length < MAX_PLATES) {
+      // add plates
+      plates.push(play.createPlate(4 - players.length));
+      console.log(plates);
+    }
   }
 };
 
