@@ -18,6 +18,11 @@ module.exports = {
     printScore(['chicken', 'gravy', 'lettuce']);
   },
 
+  addIngredient : function (player, ingredient, plate) {
+    player.inventory = _.omit(player.inventory, ingredient);
+    plate.push(ingredient);
+  },
+
   ratePlate : function (ingredients) {
     // Add base point value for plate
     // Add combos
