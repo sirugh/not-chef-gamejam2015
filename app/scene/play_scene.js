@@ -98,7 +98,7 @@ var PlayScene = {
 
     while(plates.length < MAX_PLATES) {
       // add plates
-      plates.push(play.createPlate(this.game.add.text(200, 200, '')), 4 - players.length);
+      plates.push(play.createPlate(this.game.add.text(200, 200, ''), 4 - players.length));
       console.log(plates);
     }
 
