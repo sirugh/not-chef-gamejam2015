@@ -55,6 +55,17 @@ var PlayScene = {
     var game = this.game;
     game.stage.backgroundColor = '#2d2d2d';
 
+    var background = game.add.sprite(0, 0, 'background');
+    var conveyor = game.add.sprite(0, 0, 'conveyorbelt');
+    conveyor.anchor.setTo(0.5, 0);
+    //background.anchor.setTo(0.5, 0.5);
+    background.height = this.game.height;
+    background.width = this.game.width;
+    conveyor.y = this.game.height - conveyor.height + 3;
+    conveyor.x = this.game.width / 2;
+
+    game.input.gamepad.start();
+
     // add player 1
     player1 = new Player(game, 'player1');
 
@@ -105,7 +116,13 @@ var PlayScene = {
 
     while(plates.length < MAX_PLATES) {
       // add plates
-      plates.push(play.createPlate(this.game.add.text(200, 200, ''), 4 - players.length));
+      var sprite = this.game.add.sprite(this.game.width / 2,
+                                        0, 'plate');
+      sprite.y = this.game.height - sprite.height;
+      sprite.anchor.setTo(0.5, 0);
+      var label = this.game.add.text(-sprite.width/2 + 10, 20, '');
+      sprite.addChild(label);
+      plates.push(play.createPlate(sprite, 4 - players.length));
       console.log(plates);
     }
 

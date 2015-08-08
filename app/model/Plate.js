@@ -4,14 +4,22 @@ function makeString(foods) {
   return foods.toString();
 }
 
+function update () {
+  var labelSprite = _.find(this.sprite.children, function(child) {
+    return child instanceof Phaser.Text;
+  });
+
+  if (labelSprite) {
+    labelSprite.setText(makeString(this.foods));
+  }
+}
+
 var Plate = function Plate(foods, sprite) {
   this.foods = foods;
   this.sprite = sprite;
-  this.sprite.setText(makeString(this.foods));
+  update.call(this);
 };
 
-Plate.prototype.update = function () {
-  this.sprite.setText(makeString(this.foods));
-};
+Plate.prototype.update = update;
 
 module.exports = Plate;

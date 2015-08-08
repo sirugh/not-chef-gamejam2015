@@ -13,6 +13,9 @@ var PreloaderScene = {
     this.game.load.image('plate3', 'images/plate3.png');
     this.game.load.image('plate4', 'images/plate4.png');
     this.game.load.image('select', 'images/selectSquare.png')
+    this.game.load.image('background', 'images/bg.png')
+    this.game.load.image('plate', 'images/plate.png')
+    this.game.load.image('conveyorbelt', 'images/conveyorbelt.png')
 
     game.load.atlas('xbox360', 'assets/controllers/xbox360.png', 'assets/controllers/xbox360.json');
   },
