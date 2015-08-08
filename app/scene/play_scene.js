@@ -1,16 +1,13 @@
 'use strict';
-var pad1;
-
 var play = require('../engine/play.js');
 var Player = require('../model/Player');
-var Controller = require('../model/Controller');
 var player1, player2;
 var timerText;
 
 var plate1, plate2, plate3, plate4, selectSquare, splash, splashtext;
 var keyboard;
 
-var sprite, text, cursors;
+var sprite, cursors;
 var players = [];
 var plates = [];
 var foods = [
@@ -26,8 +23,10 @@ var MAX_PLATES = 1;
 
 var timer = 10; //in seconds
 function updateTimer () {
-  if (player1.choice && player2.choice) {
+  if (player1.chosen && player2.chosen) {
     timer = 10; // reset it if both players have chosen!
+    player1.chosen = false;
+    player2.chosen = false;
   } else if (timer <= 0) {
     timer = 10; // reset if 0
   } else {
@@ -56,26 +55,27 @@ var PlayScene = {
     var game = this.game;
     game.stage.backgroundColor = '#2d2d2d';
 
-    game.input.gamepad.start();
-
     // add player 1
-    var pad1 = game.input.gamepad.pad1;
-    player1 = new Player(game, new Controller(game, pad1), 'player1');
-
-    // add player 2
-    var pad2 = game.input.gamepad.pad2;
-    player2 = new Player(game, new Controller(game, pad2), 'player2');
-
-    players.push(player1);
-    players.push(player2);
-    window.players = players;
-    window.plates = plates;
+    player1 = new Player(game, 'player1');
 
     player1.populateInventory(function (text) {
       var sprite = game.add.text(0, 0, text);
       sprite.anchor.setTo(.5, .5);
       return sprite;
     });
+
+    // add player 2
+    player2 = new Player(game, 'player2');
+    player2.populateInventory(function (text) {
+      var sprite = game.add.text(0, 0, text);
+      sprite.anchor.setTo(.5, .5);
+      return sprite;
+    });
+
+    players.push(player1);
+    players.push(player2);
+    window.players = players;
+    window.plates = plates;
 
     //// Set up GUI
 
@@ -86,17 +86,7 @@ var PlayScene = {
     sprite.originY = this.game.world.centerY;
     sprite.xDif = 0;
     sprite.yDif = 0;
-    //sprite.scale = {"x":.4, "y":.4};
 
-    text = this.game.add.text(20, 20, 'move with arrow keys', { fill: '#ffffff' });
-
-    /*splash = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'splash');
-    splash.anchor.setTo(.5, .5);
-
-    splashtext = this.game.add.text(0, 0, "HEY!", { fill: '#ffffff', align: "center" });
-    splashtext.x = splash.x;
-    splashtext.y = splash.y;
-    splashtext.anchor.set(.5);*/
     SUSPEND = false;
 
     cursors = this.game.input.keyboard.createCursorKeys();
@@ -144,40 +134,43 @@ function unsuspendHandler(event) {
 }
 
 function keyboardEventHandler(event) {
-  if(event.keyIdentifier === "Left" && sprite.xDif > 0) {
-    // move, but not out of the selectable area
-    sprite.x -= GRID_SIZE;
-    sprite.xDif--;
+  //player logic
+  var player1KeyMap = {
+    81: 'Q',
+    87: 'W',
+    69: 'E',
+    82: 'R'
   }
-  if(event.keyIdentifier === "Right" && sprite.xDif < foods[0].length-1) {
-    sprite.x += GRID_SIZE;
-    sprite.xDif++;
+  var player2KeyMap = {
+    85: 'U',
+    73: 'I',
+    79: 'O',
+    80: 'P'
   }
-  if(event.keyIdentifier === "Down" && sprite.yDif < foods.length-1) {
-    sprite.y += GRID_SIZE;
-    sprite.yDif++;
+  if ( _(Object.keys(player1KeyMap)).contains(event.keyCode.toString()) ) {
+    var key = player1KeyMap[event.keyCode];
+    if(key === 'Q') {
+      player1.choose(0);
+    } else if (key === 'W') {
+      player1.choose(1);
+    } else if (key === 'E') {
+      player1.choose(2);
+    } else if (key === 'R') {
+      player1.choose(3);
+    }
   }
-  if(event.keyIdentifier === "Up" && sprite.yDif > 0) {
-    sprite.y -= GRID_SIZE;
-    sprite.yDif--;
-  }
-  if(event.keyIdentifier === "Enter") {
-    //create a food and send it off into the distance
-    var foodIndex = getIndex(sprite.xDif, sprite.yDif);
-    var food = players[0].inventory[foodIndex];
 
-    players[0].addIngredient(food, plates[0]);
-
-    /*var tween = this.game.add.tween(newFood, this.game, this.game.tweens);
-    tween.to({
-      x: 200,
-      y: 0
-    });
-    tween.start();*/
-
-    /*tween.onComplete = function(target, tween) {
-      target.kill();
-    }*/
+  if ( _(Object.keys(player2KeyMap)).contains(event.keyCode.toString()) ) {
+    var key = player2KeyMap[event.keyCode];
+    if(key === 'U') {
+      player2.choose(0);
+    } else if (key === 'I') {
+      player2.choose(1);
+    } else if (key === 'O') {
+      player2.choose(2);
+    } else if (key === 'P') {
+      player2.choose(3);
+    }
   }
 }
 

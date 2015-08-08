@@ -1,10 +1,8 @@
 var play = require('../engine/play');
-var Player = function(game, controller, name) {
-
+var Player = function(game, name) {
   this.name = name;
-  this.controller = controller;
   this.inventory = null;
-  this.choice = undefined;
+  this.chosen = false;
 }
 
 Player.prototype.populateInventory = function (constructSprite) {
@@ -24,6 +22,25 @@ Player.prototype.addIngredient = function (food, plate) {
 
 Player.prototype.removeFromInventory = function (inventory, food) {
   food.sprite.alpha = .1;
+}
+
+Player.prototype.choose = function (index) {
+  // var foodIndex = getIndex(sprite.xDif, sprite.yDif);
+  var food = this.inventory[index];
+  this.addIngredient(food, plates[0]);
+  console.log('%s selected %s', this.name, food.name);
+  this.chosen = true;
+     /*var tween = this.game.add.tween(newFood, this.game, this.game.tweens);
+  //   tween.to({
+  //     x: 200,
+  //     y: 0
+  //   });
+  //   tween.start();*/
+
+  //   /*tween.onComplete = function(target, tween) {
+  //     target.kill();
+  //   }*/
+  // }
 }
 
 module.exports = Player;
