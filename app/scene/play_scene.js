@@ -5,6 +5,7 @@ var play = require('../engine/play.js');
 var Player = require('../model/Player');
 var Controller = require('../model/Controller');
 var player1, player2;
+var timerText;
 
 var plate1, plate2, plate3, plate4, selectSquare, splash, splashtext;
 var keyboard;
@@ -22,6 +23,18 @@ var GRID_SIZE = 200;
 var GRID_COLS = 2;
 var SUSPEND = false;
 var MAX_PLATES = 1;
+
+var timer = 10; //in seconds
+function updateTimer () {
+  if (player1.choice && player2.choice) {
+    timer = 10; // reset it if both players have chosen!
+  } else if (timer <= 0) {
+    timer = 10; // reset if 0
+  } else {
+    timer -= 1;
+  }
+  timerText.setText(timer);
+}
 
 function getCoords(game, i) {
   var col = i % GRID_COLS;
@@ -49,17 +62,17 @@ var PlayScene = {
     var pad1 = game.input.gamepad.pad1;
     player1 = new Player(game, new Controller(game, pad1), 'player1');
 
-    //add player 2
+    // add player 2
     var pad2 = game.input.gamepad.pad2;
     player2 = new Player(game, new Controller(game, pad2), 'player2');
 
-    players.push(play.createPlayer());
-    players.push(play.createPlayer());
+    players.push(player1);
+    players.push(player2);
     window.players = players;
     window.plates = plates;
 
-    play.populateInventory(players[0], function (text) {
-     var sprite = game.add.text(0, 0, text);
+    player1.populateInventory(function (text) {
+      var sprite = game.add.text(0, 0, text);
       sprite.anchor.setTo(.5, .5);
       return sprite;
     });
@@ -90,6 +103,10 @@ var PlayScene = {
     keyboard = this.game.input.keyboard;
     keyboard.onUpCallback = keyboardEventHandler;
 
+    // once the game is started, start the timer
+    var style = { font: "65px Arial", fill: "#ff0044"};
+    timerText = game.add.text(5, 2, timer, style);
+    game.time.events.loop(Phaser.Timer.SECOND, updateTimer);
     //// End GUI setup
   },
 
@@ -149,7 +166,7 @@ function keyboardEventHandler(event) {
     var foodIndex = getIndex(sprite.xDif, sprite.yDif);
     var food = players[0].inventory[foodIndex];
 
-    play.addIngredient(players[0], food, plates[0]);
+    players[0].addIngredient(food, plates[0]);
 
     /*var tween = this.game.add.tween(newFood, this.game, this.game.tweens);
     tween.to({
