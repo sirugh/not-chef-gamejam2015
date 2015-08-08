@@ -5,9 +5,9 @@ var Plate = require('../model/Plate.js');
 
 module.exports = {
   testRatePlate : function () {
-    function printScore(ingredients) {
-      var score = ratePlate(ingredients);
-      console.log(ingredients + ': ' + score);
+    function printScore(foodItems) {
+      var score = ratePlate(new Plate(foodItems));
+      console.log(foodItems + ': ' + score);
     }
 
     printScore(['lettuce', 'tomato', 'cheese']);
@@ -19,11 +19,8 @@ module.exports = {
     printScore(['chicken', 'gravy', 'lettuce']);
   },
 
-  createPlate : function (sprite, count) {
-    return new Plate(this.chooseIngredients(count), sprite);
-  },
-
-  ratePlate : function (ingredients) {
+  ratePlate : function (plate) {
+    var foodItems = plate.foodItems;
     // Add base point value for plate
     // Add combos
 
@@ -37,8 +34,8 @@ module.exports = {
       var b = combo[1];
       var bonus = combo[2];
 
-      if (ingredients.indexOf(a) !== -1 &&
-          ingredients.indexOf(b) !== -1) {
+      if (foodItems.indexOf(a) !== -1 &&
+          foodItems.indexOf(b) !== -1) {
 
         if(bonus < 0) {
           bonus = bonus * 5;
@@ -49,30 +46,39 @@ module.exports = {
       }
     });
 
-    ingredients.forEach( function (ingredient) {
-      score += 10 * (multipliers[ingredient] || 1);
+    foodItems.forEach( function (food) {
+      score += 10 * (multipliers[food] || 1);
     });
 
     return score;
   },
 
-  chooseIngredients : function (count) {
-    var possibleIngredients = foods.getIngredients();
-    var ingredients = [];
-    var index;
-    var ingredient;
+  createPlayer : function () {
+    var player = { };
+    return player;
+  },
 
-    while(ingredients.length < count) {
-      index = Math.floor(Math.random() * possibleIngredients.length);
-      ingredient = possibleIngredients[index];
-      possibleIngredients.splice(index, 1);
-      ingredients.push(ingredient);
+  chooseFoods : function (count) {
+    var possibleFoods = foods.getFoods();
+    var chosen = [];
+    var index;
+    var food;
+
+    while(chosen.length < count) {
+      index = Math.floor(Math.random() * possibleFoods.length);
+      food = possibleFoods[index];
+      possibleFoods.splice(index, 1);
+      chosen.push(food);
     }
 
-    return ingredients;
+    return chosen;
+  },
+
+  isPlateComplete : function (plate) {
+    return plate.foodItems.length == 4;
   }
 }
 
 window.ratePlate = module.exports.ratePlate;
 window.testRatePlate = module.exports.testRatePlate;
-window.addIngredient = module.exports.addIngredient;
+window.addFood = module.exports.addFood;

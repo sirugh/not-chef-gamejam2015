@@ -18,17 +18,17 @@ var foods = {
   ]
 }
 
-foods.getIngredients = function () {
-  var ingredients = [];
+foods.getFoods = function () {
+  var included = [];
 
   foods.combos.forEach(function(combo) {
-    ingredients.push(combo[0]);
-    ingredients.push(combo[1]);
+    included.push(combo[0]);
+    included.push(combo[1]);
     // todo consider slicing all but the last element and adding it
-    // Set.prototype.add.call(ingredients, combo.slice(0, combo.length - 1));
+    // Set.prototype.add.call(foods, combo.slice(0, combo.length - 1));
   });
 
-  return _.uniq(ingredients);
+  return _.uniq(included);
 };
 
 module.exports = foods;

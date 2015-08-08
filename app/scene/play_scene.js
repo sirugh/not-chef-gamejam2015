@@ -9,7 +9,7 @@ var keyboard;
 
 var sprite;
 var players = [];
-var foods = [
+var foodItems = [
   ["plate1", "plate2"],
   ["plate3", "plate4"]
 ];
@@ -18,6 +18,7 @@ var foods = [
 var GRID_SIZE = 200;
 var GRID_COLS = 2;
 var SUSPEND = false;
+var MAX_PLATES = 1;
 
 var timer = 10; //in seconds
 function updateTimer () {
@@ -27,6 +28,12 @@ function updateTimer () {
     player2.chosen = false;
   } else if (timer <= 0) {
     timer = 10; // reset if 0
+    console.log("player 1 [" + player1.score + "]: " + player1.plate.foodItems.toString() + " scored " + play.ratePlate(player1.plate));
+    console.log("player 2 [" + player2.score + "]: " + player2.plate.foodItems.toString() + " scored " + play.ratePlate(player2.plate));
+    player1.completePlate();
+    player2.completePlate();
+    player1.addPlate();
+    player2.addPlate();
   } else {
     timer -= 1;
   }

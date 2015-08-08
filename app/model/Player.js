@@ -7,6 +7,8 @@ var Player = function(game, name, id) {
   this.id = id;
   this.inventory = null;
   this.plate = null;
+  this.completedPlates = [];
+  this.score = 0;
 }
 
 Player.prototype.addPlate = function () {
@@ -25,13 +27,13 @@ Player.prototype.addPlate = function () {
   var label = this.game.add.text(-sprite.width/2 + 130, 0, '');
   sprite.addChild(label);
 
-  var plate = new Plate(play.chooseIngredients(2), sprite);
+  var plate = new Plate(play.chooseFoods(2), sprite);
   this.plate = plate;
 }
 
 Player.prototype.populateInventory = function () {
   var self = this;
-  this.inventory = _.map(play.chooseIngredients(4), function(name) {
+  this.inventory = _.map(play.chooseFoods(4), function(name) {
     return {
       name : name,
       sprite : function (text) {
@@ -43,7 +45,14 @@ Player.prototype.populateInventory = function () {
   });
 }
 
-Player.prototype.addIngredient = function (food) {
+Player.prototype.completePlate = function () {
+  this.completedPlates += this.plate;
+  this.score += play.ratePlate(this.plate);
+  this.plate.kill();
+  this.plate = null;
+}
+
+Player.prototype.addFood = function (food) {
   this.removeFromInventory(food);
   this.plate.foods.push(food.name);
   this.plate.update();
@@ -57,7 +66,7 @@ Player.prototype.removeFromInventory = function (food) {
 
 Player.prototype.choose = function (index) {
   var food = this.inventory[index];
-  this.addIngredient(food);
+  this.addFood(food);
   console.log('%s selected %s', this.name, food.name);
      /*var tween = this.game.add.tween(newFood, this.game, this.game.tweens);
   //   tween.to({
