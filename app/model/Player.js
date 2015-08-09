@@ -52,7 +52,7 @@ Player.prototype.completePlate = function () {
   this.plate = null;
 }
 
-Player.prototype.addFood = function (food) {
+Player.prototype.addIngredientToPlate = function (food) {
   this.removeFromInventory(food);
   this.plate.foods.unshift(food.name); // put the food on top
   this.plate.update();
@@ -66,7 +66,7 @@ Player.prototype.removeFromInventory = function (food) {
 
 Player.prototype.choose = function (index) {
   var food = this.inventory[index];
-  this.addFood(food);
+  this.addIngredientToPlate(food);
   console.log('%s selected %s', this.name, food.name);
      /*var tween = this.game.add.tween(newFood, this.game, this.game.tweens);
   //   tween.to({
