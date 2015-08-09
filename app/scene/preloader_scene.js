@@ -36,6 +36,7 @@ var PreloaderScene = {
     this.game.load.image('lettuce', 'images/lettuce.png');
     this.game.load.image('gravy', 'images/gravy.png');
     this.game.load.image('tomato', 'images/tomato.png');
+    this.game.load.image('gamejam', 'images/gamejam.png');
     this.game.load.image('breadbottom', 'images/breadbottom.png');
     this.game.load.image('breadtop', 'images/breadtop.png');
 
