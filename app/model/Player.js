@@ -54,7 +54,7 @@ Player.prototype.completePlate = function () {
 
 Player.prototype.addFood = function (food) {
   this.removeFromInventory(food);
-  this.plate.foods.push(food.name);
+  this.plate.foods.unshift(food.name); // put the food on top
   this.plate.update();
 }
 
