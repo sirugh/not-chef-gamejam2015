@@ -5,7 +5,7 @@ var Round = require('./Round');
 var play = require('../engine/play');
 
 var TRIALS_PER_ROUND = 4;
-var ROUNDS_PER_MATCH = 3;
+var ROUNDS_PER_MATCH = 1;
 var matchNumber = 0;
 
 var Match = function Match(game) {
@@ -25,6 +25,12 @@ Match.prototype.toString = function() {
 }
 
 Match.prototype.nextRound = function() {
+  var someoneHasAnIngredient = _.some(this.players, function(player) {
+    return _.some(player.inventory, function(item) {
+      return !item.selected;
+    });
+  });
+
   round = this.rounds[this.rounds.length - 1];
   round.winners.forEach(function(winner) {
     winner.roundsWon.push(round);
@@ -33,11 +39,14 @@ Match.prototype.nextRound = function() {
 //  var winners = play.leaders(this.players);
   // Calculate by round count.
   var winners = round.winners;
+
   console.log("Round " + this.rounds.length + "/" + this.ROUNDS_PER_MATCH + " completed. Winner(s): " + winners);
+
   console.log("Round Score: " + this.players.reduce(function(result, player) {
     return result.concat("Player " + player.id + ": " + player.roundsWon.length);
   }, []).join(', '));
-  if (this.rounds.length >= this.ROUNDS_PER_MATCH) {
+
+  if (!someoneHasAnIngredient || this.rounds.length >= this.ROUNDS_PER_MATCH) {
     this.complete();
   } else {
     var round = this.addRound();

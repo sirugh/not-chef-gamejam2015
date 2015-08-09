@@ -139,7 +139,21 @@ var PlayScene = {
     //// End GUI setup
   }, //end create
 
-  update : function () { }
+  update : function () {
+    if(!match.active) {
+      return;
+    }
+
+    var someoneHasAnIngredient = _.some(players, function(player) {
+      return _.some(player.inventory, function(item) {
+        return !item.selected;
+      });
+    });
+
+    if(!someoneHasAnIngredient) {
+      match.complete();
+    }
+  }
 };
 
 function keyboardEventHandler(event) {
