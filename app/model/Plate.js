@@ -1,7 +1,7 @@
 'use strict';
 
 function makeString(foods) {
-  return foods.toString();
+  return foods.join('\n');
 }
 
 function update () {
@@ -10,7 +10,9 @@ function update () {
   });
 
   if (labelSprite) {
-    labelSprite.setText(makeString(this.foods));
+    var label = makeString(this.foods);
+    labelSprite.setText(label);
+    labelSprite.y = 20 - 30 * this.foods.length;
   }
 }
 
