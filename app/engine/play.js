@@ -81,4 +81,3 @@ module.exports = {
 
 window.ratePlate = module.exports.ratePlate;
 window.testRatePlate = module.exports.testRatePlate;
-window.addFood = module.exports.addFood;

@@ -9,6 +9,7 @@ var Player = function(game, name, id) {
   this.plate = null;
   this.completedPlates = [];
   this.score = 0;
+  this.chosen = false;
 }
 
 Player.prototype.addPlate = function () {
@@ -47,7 +48,7 @@ Player.prototype.populateInventory = function () {
 }
 
 Player.prototype.completePlate = function () {
-  this.completedPlates += this.plate;
+  this.completedPlates.push(this.plate);
   this.score += play.ratePlate(this.plate);
   this.plate.kill();
   this.plate = null;
@@ -55,7 +56,7 @@ Player.prototype.completePlate = function () {
 
 Player.prototype.addIngredientToPlate = function (food) {
   this.removeFromInventory(food);
-  this.plate.foods.unshift(food.name); // put the food on top
+  this.plate.foodItems.unshift(food.name); // put the food on top
   this.plate.update();
 }
 
@@ -72,6 +73,7 @@ Player.prototype.choose = function (index) {
   if (!food.selected) {
     console.log('%s selected %s', this.name, food.name);
     this.addIngredientToPlate(food);
+    this.chosen = true;
   } else {
     console.log('%s already chosen!', food.name);
   }
