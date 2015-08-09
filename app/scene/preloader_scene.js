@@ -19,7 +19,20 @@ var PreloaderScene = {
     this.game.load.spritesheet('woman_a', 'images/woman_a.png', 48, 64);
     this.game.load.spritesheet('woman_b', 'images/woman_b.png', 48, 64);
     this.game.load.spritesheet('man', 'images/man.png', 70, 70);
-    this.game.load.image('conveyorbelt', 'images/conveyorbelt_final.gif')
+
+    this.game.load.spritesheet('conveyorbelt', 'images/conveyor_spritesheet.png', 651, 210);
+
+    this.game.load.image('banana', 'images/banana.png');
+    this.game.load.image('fish', 'images/fish.png');
+    this.game.load.image('chicken', 'images/chicken.png');
+    this.game.load.image('cheese', 'images/cheese.png');
+    this.game.load.image('caviar', 'images/caviar.png');
+    this.game.load.image('peanut butter', 'images/peanutbutter.png');
+    this.game.load.image('lettuce', 'images/lettuce.png');
+    this.game.load.image('gravy', 'images/gravy.png');
+    this.game.load.image('tomato', 'images/tomato.png');
+    this.game.load.image('breadbottom', 'images/breadbottom.png');
+    this.game.load.image('breadtop', 'images/breadtop.png');
 
     game.load.atlas('xbox360', 'assets/controllers/xbox360.png', 'assets/controllers/xbox360.json');
   },

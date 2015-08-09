@@ -96,7 +96,15 @@ var PlayScene = {
     };
 
     right();
-
+    
+    var conveyor = game.add.sprite(0, 0, 'conveyorbelt');
+    conveyor.frame = 1;
+    conveyor.animations.add('move', [0, 1], 2, true);
+    conveyor.animations.play('move');
+    //to stop the animation, call conveyor.animations.stop();
+    conveyor.anchor.setTo(0.5, 0);
+    
+    //background.anchor.setTo(0.5, 0.5);
     background.height = this.game.height;
     background.width = this.game.width;
     conveyor.y = this.game.height - conveyor.height + 3;
