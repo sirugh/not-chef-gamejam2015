@@ -23,6 +23,8 @@ var PreloaderScene = {
     this.game.load.spritesheet('woman_b', 'images/woman_b.png', 48, 64);
     this.game.load.spritesheet('man', 'images/man.png', 70, 70);
 
+    this.game.load.image('thoughtbubble', 'images/thoughtbubble.png')
+
     this.game.load.spritesheet('conveyorbelt', 'images/conveyor_spritesheet.png', 651, 210);
 
     this.game.load.image('banana', 'images/banana.png');

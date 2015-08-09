@@ -2,6 +2,7 @@
 var play = require('../engine/play.js');
 var Player = require('../model/Player');
 var Match = require('../model/Match');
+var dinerThoughts = require('../data/dinerThoughts');
 var globalGame = require('../game');
 var player1, player2;
 
@@ -26,14 +27,47 @@ var PlayScene = {
     game.stage.backgroundColor = '#2d2d2d';
 
     var background = game.add.sprite(0, 0, 'background');
+    var womanThought = game.add.group();
+    var thoughtText = new Phaser.Text(game, 10, 10, '');
     var woman = game.add.sprite(this.game.width / 2, 90, 'woman_a');
     var table = game.add.sprite(0, 0, 'table');
 
+    womanThought.x = -20;
+    womanThought.y = -8;
+
+    woman.addChild(womanThought);
+    var bubble = womanThought.create(0, 0, 'thoughtbubble');
+    womanThought.visible = false;
+
+    var thoughtStyle = {
+        wordWrap: true,
+        wordWrapWidth: bubble.width - 20
+    };
+
+    thoughtText.setStyle(thoughtStyle);
+
     woman.anchor.set(.5, 0);
     woman.scale.set(5, 5);
+    womanThought.scale.set(1/woman.scale.x, 1/woman.scale.y);
+    womanThought.add(thoughtText);
+
+    womanThought.scale.set(.14, .14);
+
     woman.animations.add('left', [3, 4, 5, 4]);
     woman.animations.add('right', [6, 7, 8, 7]);
     woman.animations.add('stop', [1]);
+
+    setTimeout(animateRight, Math.random() * 20 * 1000);
+    setTimeout(think, Math.random() * 20 * 1000);
+
+    function think () {
+      thoughtText.setText(dinerThoughts[Math.floor(Math.random() * dinerThoughts.length)]);
+      womanThought.visible = true;
+      setTimeout(function() {
+        womanThought.visible = false;
+      }, 5000);
+      setTimeout(think, 1000 * (Math.random() * 20 + 10));
+    }
 
     function doTween(thing, state, duration) {
       duration = duration || 3000;
