@@ -23,12 +23,28 @@ var PlayScene = {
     globalGame.game = game;
     game.stage.backgroundColor = '#2d2d2d';
 
+    function drawRect(width, height, x, y) {
+      var drawnObject;
+      var bmd = game.add.bitmapData(width, height);
+
+      bmd.ctx.beginPath();
+      bmd.ctx.rect(0, 0, width, height);
+      bmd.ctx.fillStyle = "rgba(0, 0, 0, 0.3)";//'#000';
+      bmd.ctx.fill();
+      drawnObject = game.add.sprite(x, y, bmd);
+      drawnObject.anchor.setTo(0.5, 0.5);
+    }
+
     var music = game.add.audio('music').play();
     music.volume = 0.3;
     music.loop = true;
     music.play();
 
     var background = game.add.sprite(0, 0, 'background');
+
+    drawRect(400, 300, 50, 280);
+    drawRect(400, 300, 1150, 280);
+
     var womanThought = game.add.group();
     var thoughtText = new Phaser.Text(game, 10, 10, '');
     var woman = game.add.sprite(this.game.width / 2, 90, 'woman_a');

@@ -153,17 +153,20 @@ Player.prototype.graphics = function() {
   // Set up player visual inventory
   var sprite;
   self = this;
+
   this.inventory.forEach(function(food, i) {
     sprite = food.sprite;
     // create sprite
     sprite.x = spriteX;
-    sprite.y = i * sprite.height + self.game.world.height/2;
+    sprite.y = i * sprite.height + 150;
 
     // create label
     var labelText = labelMap[i][labelTextIdx]
     var label = self.game.add.text(labelX, -sprite.height/2, labelText, {fill : self.color});
     sprite.addChild(label);
   });
+
+
   if (!this.scoreText) {
     var playerScoreStyle = {fill : this.color, font: '65px Arial'};
     this.scoreText = this.game.add.text(scoreTextX, '0', this.score, playerScoreStyle);
