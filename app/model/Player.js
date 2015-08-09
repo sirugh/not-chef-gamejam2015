@@ -10,7 +10,6 @@ var Player = function(game, name, id, sprite, color) {
   this.plate = null;
   this.completedPlates = [];
   this.score = 0;
-  this.scoreText;
   this.chosen = false;
   this.trialsWon = [];
   this.roundsWon = [];
@@ -42,6 +41,11 @@ Player.prototype.addPlate = function () {
 }
 
 Player.prototype.populateInventory = function () {
+  if (this.inventory) {
+    this.inventory.forEach(function(food) {
+      food.sprite.destroy();
+    });
+  }
   var self = this;
   this.inventory = _.map(play.chooseFoods(4), function(name) {
     return {
@@ -56,6 +60,7 @@ Player.prototype.populateInventory = function () {
       selected : false
     }
   });
+  this.graphics();
 }
 
 Player.prototype.completePlate = function () {
@@ -108,6 +113,50 @@ Player.prototype.choose = function (index) {
 Player.prototype.reset = function () {
   // Probably better to just create a new player with the same name?
   this.populateInventory();
+}
+
+Player.prototype.graphics = function() {
+  var labelMap = {
+    0: ['Q', 'U'],
+    1: ['W', 'I'],
+    2: ['E', 'O'],
+    3: ['R', 'P']
+  }
+
+  var spriteX;
+  var labelText;
+  var labelX;
+  if (this.id == 1) {
+    // Player 1
+    var spriteX = 50;
+    var labelTextIdx = 0;
+    var labelX = -30;
+    var scoreTextX = 250;
+  } else {
+    // Player 2
+    var spriteX = this.game.world.width - 50;
+    var labelTextIdx = 1;
+    var labelX = 10;
+    var scoreTextX = 750;
+  }
+  // Set up player visual inventory
+  var sprite;
+  self = this;
+  this.inventory.forEach(function(food, i) {
+    sprite = food.sprite;
+    // create sprite
+    sprite.x = spriteX;
+    sprite.y = i * sprite.height + self.game.world.height/2;
+
+    // create label
+    var labelText = labelMap[i][labelTextIdx]
+    var label = self.game.add.text(labelX, -sprite.height/2, labelText, {fill : self.color});
+    sprite.addChild(label);
+  });
+  if (!this.scoreText) {
+    var playerScoreStyle = {fill : this.color, font: '65px Arial'};
+    this.scoreText = this.game.add.text(scoreTextX, '0', this.score, playerScoreStyle);
+  }
 }
 
 module.exports = Player;

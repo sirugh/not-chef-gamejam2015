@@ -26,8 +26,6 @@ Match.prototype.toString = function() {
 
 Match.prototype.nextRound = function() {
   round = this.rounds[this.rounds.length - 1];
-  console.log(this.players);
-  console.log(round);
   round.winners.forEach(function(winner) {
     winner.roundsWon.push(round);
   });
@@ -66,6 +64,11 @@ Match.prototype.addPlayer = function(player) {
 Match.prototype.complete = function() {
   this.active = false;
   console.log("GAME OVER!!");
+
+  // Make it clear that the game is over.
+  this.players.forEach(function(player) {
+    player.scoreText.style.font = '140px Arial';
+  })
 
   // Calculate by pure score:
 //  this.winners = play.leaders(this.players);

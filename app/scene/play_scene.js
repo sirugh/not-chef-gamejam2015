@@ -52,7 +52,6 @@ var PlayScene = {
 
     function doTween(thing, state, duration) {
       duration = duration || 3000;
-      console.log(thing);
       var tween = game.add.tween(thing).to(state, 3000, Phaser.Easing.Linear.None, true);
       return tween;
     }
@@ -166,49 +165,6 @@ var PlayScene = {
     keyboard.onUpCallback = keyboardEventHandler;
 
     //// End GUI setup
-    // Set up player visual inventory
-    var self = this;
-    var sprite;
-
-    var labelMap = {
-      0: ['Q', 'U'],
-      1: ['W', 'I'],
-      2: ['E', 'O'],
-      3: ['R', 'P']
-    }
-
-    player1.inventory.forEach(function(food, i) {
-      sprite = food.sprite;
-      // create sprite
-      sprite.x = 50;
-      sprite.y = i * sprite.height + self.world.height/2;
-
-      // create label
-      var labelText = labelMap[i][0];
-      var label = self.game.add.text(-30, -sprite.height/2, labelText, {fill : player1.color});
-      sprite.addChild(label);
-    });
-
-    player2.inventory.forEach(function (food, i) {
-      sprite = food.sprite;
-      sprite.x = self.world.width - 50;
-      sprite.y = i * sprite.height + self.world.height/2;
-
-      // create label
-      var labelText = labelMap[i][1];
-      var label = self.game.add.text(10, -sprite.height/2, labelText, {fill : player2.color} );
-      // label.anchor.setTo(0, 0);
-      sprite.addChild(label);
-    });
-    _(players).each(function (player) {
-      var playerScoreStyle = {fill : player.color, font: '65px Arial'};
-      player.scoreText = game.add.text(0,0, '0', playerScoreStyle);
-      if (player.id === 1) {
-        player.scoreText.x = 250;
-      } else {
-        player.scoreText.x = 750;
-      }
-    });
   }, //end create
 
   update : function () {
