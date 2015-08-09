@@ -137,7 +137,7 @@ var PlayScene = {
       return playerSprite;
     }
 
-    player1 = new Player(game, 'Player 1', 1, getSpriteFor(0));
+    player1 = new Player(game, 'Player 1', 1, getSpriteFor(0), '#ff00ff');
     player1.populateInventory()
 
     var p1ConveyorStart = { x: playerOneX, y : playerY };
@@ -169,7 +169,7 @@ var PlayScene = {
     player1.addPlate();
 
     // add player 2
-    player2 = new Player(game, 'Player 2', 2, getSpriteFor(1));
+    player2 = new Player(game, 'Player 2', 2, getSpriteFor(1), '#00ffff');
     player2.populateInventory();
 
     player2.addPlate();
@@ -188,7 +188,7 @@ var PlayScene = {
 
     // once the game is started, start the timer
     var style = { font: "65px Arial", fill: "#ff0044"};
-    timerText = game.add.text(5, 2, timer, style);
+    timerText = game.add.text(game.world.centerX, 2, timer, style);
     game.time.events.loop(Phaser.Timer.SECOND, updateTimer);
     //// End GUI setup
     // Set up player visual inventory
@@ -202,7 +202,7 @@ var PlayScene = {
       3: ['R', 'P']
     }
 
-    players[0].inventory.forEach(function(food, i) {
+    player1.inventory.forEach(function(food, i) {
       sprite = food.sprite;
       // create sprite
       sprite.x = 50;
@@ -210,23 +210,31 @@ var PlayScene = {
 
       // create label
       var labelText = labelMap[i][0];
-      var label = self.game.add.text(-30, -sprite.height/2, labelText, {fill : '#ff00ff'});
+      var label = self.game.add.text(-30, -sprite.height/2, labelText, {fill : player1.color});
       sprite.addChild(label);
     });
 
-    players[1].inventory.forEach(function (food, i) {
+    player2.inventory.forEach(function (food, i) {
       sprite = food.sprite;
       sprite.x = self.world.width - 50;
       sprite.y = i * sprite.height + self.world.height/2;
 
       // create label
       var labelText = labelMap[i][1];
-      var label = self.game.add.text(10, -sprite.height/2, labelText, {fill : '#0000ff'} );
+      var label = self.game.add.text(10, -sprite.height/2, labelText, {fill : player2.color} );
       // label.anchor.setTo(0, 0);
       sprite.addChild(label);
     });
-
-  },
+    _(players).each(function (player) {
+      if (player.id === 1) {
+        player.scoreText = game.add.text(0,0, '0', {fill : player.color});
+        player.scoreText.x = 250;
+      } else {
+        player.scoreText = game.add.text(0,0, '0', {fill : player.color});
+        player.scoreText.x = 750;
+      }
+    })
+  }, //end create
 
   update : function () {
     // TODO: Put something here.

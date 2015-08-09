@@ -1,7 +1,7 @@
 var play = require('../engine/play');
 var Plate = require('../model/Plate');
 
-var Player = function(game, name, id, sprite) {
+var Player = function(game, name, id, sprite, color) {
   this.sprite = sprite;
   this.game = game;
   this.name = name;
@@ -10,8 +10,9 @@ var Player = function(game, name, id, sprite) {
   this.plate = null;
   this.completedPlates = [];
   this.score = 0;
+  this.scoreText;
   this.chosen = false;
-  this.color = '#ff00ff';
+  this.color = color;
 }
 
 Player.prototype.addPlate = function () {
@@ -59,10 +60,15 @@ Player.prototype.completePlate = function () {
   this.completedPlates.push(this.plate);
   var plateScore = play.ratePlate(this.plate);
   this.score += plateScore;
-
+  this.scoreText.setText(this.score);
 
   //TODO make this actually align with the player/plate
-  var scoreText = game.add.text( game.width/4 * this.id, 500, plateScore + 'pts!', {fill : this.color, font: "65px Arial"});
+  var scoreText = game.add.text(0, 500, plateScore + 'pts!', {fill : this.color, font: "65px Arial"});
+  if (this.id === 1) {
+    scoreText.x = 250;
+  }else {
+    scoreText.x = 750;
+  }
   game.add.tween(scoreText).to({y: 0}, 3000, Phaser.Easing.Linear.None, true);
   game.add.tween(scoreText).to({alpha: 0}, 3000, Phaser.Easing.Linear.None, true);
   //TODO actually delete the score text. right now this just sets alpha to 0 effectively making it invisible.
@@ -81,8 +87,6 @@ Player.prototype.removeFromInventory = function (food) {
   food.sprite.alpha = .1;
   food.sprite.children[0].alpha = .1;
   food.selected = true;
-  // var index = _(this.inventory).findIndex({name : food.name});
-  // this.inventory.splice(index, 1);
 }
 
 Player.prototype.choose = function (index) {
@@ -94,17 +98,6 @@ Player.prototype.choose = function (index) {
   } else {
     console.log('%s already chosen!', food.name);
   }
-  /*var tween = this.game.add.tween(newFood, this.game, this.game.tweens);
-  //   tween.to({
-  //     x: 200,
-  //     y: 0
-  //   });
-  //   tween.start();*/
-
-  //   /*tween.onComplete = function(target, tween) {
-  //     target.kill();
-  //   }*/
-  // }
 }
 
 Player.prototype.reset = function () {
