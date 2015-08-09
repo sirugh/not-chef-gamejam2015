@@ -47,11 +47,19 @@ function updateTimer () {
 }
 
 Trial.prototype.start = function() {
+  var self = this;
   this.active = true;
   // once the game is started, start the timer
   var style = { font: "65px Arial", fill: "#ff0044"};
   timerText = this.game.add.text(5, 2, this.timer, style);
   this.loop = this.game.time.events.loop(Phaser.Timer.SECOND, _.bind(updateTimer, this, timerText));
+
+  this.players.forEach(function(player) {
+    var xFromCenter = player.plate.group.x - self.game.width / 2;
+    var x = (xFromCenter * .7) + self.game.width / 2;
+    self.game.add.tween(player.plate.group).to({x: x, y : self.game.height - 200}, self.timer * 1000, Phaser.Easing.Linear.None, true);
+    self.game.add.tween(player.plate.group.scale).to({x: .7, y: .7}, self.timer * 1000, Phaser.Easing.Linear.None, true);
+  });
 }
 
 Trial.prototype.complete = function() {
