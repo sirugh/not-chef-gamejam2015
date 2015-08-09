@@ -2,6 +2,7 @@
 var play = require('../engine/play.js');
 var Player = require('../model/Player');
 var Match = require('../model/Match');
+var globalGame = require('../game');
 var player1, player2;
 
 var plate1, plate2, plate3, plate4, selectSquare, splash, splashtext;
@@ -14,12 +15,14 @@ var foodItems = [
   ["plate3", "plate4"]
 ];
 
+var pauseMenu;
 var PlayScene = {
   preload : function () {
   },
 
   create : function () {
     var game = this.game;
+    globalGame.game = game;
     game.stage.backgroundColor = '#2d2d2d';
 
     var background = game.add.sprite(0, 0, 'background');
@@ -137,23 +140,11 @@ var PlayScene = {
     keyboard = this.game.input.keyboard;
     keyboard.onUpCallback = keyboardEventHandler;
     //// End GUI setup
+    // game starts as paused
+    pauseMenu = game.add.text(game.world.centerX, game.world.centerY + 50, 'PRESS SPACE TO START', {fill : '#ffffff'});
+    pauseMenu.anchor.setTo(.5,.5);
+    pauseOrUnpause();
   }, //end create
-
-  update : function () {
-    if(!match.active) {
-      return;
-    }
-
-    var someoneHasAnIngredient = _.some(players, function(player) {
-      return _.some(player.inventory, function(item) {
-        return !item.selected;
-      });
-    });
-
-    if(!someoneHasAnIngredient) {
-      match.complete();
-    }
-  }
 };
 
 function keyboardEventHandler(event) {
@@ -182,9 +173,29 @@ function keyboardEventHandler(event) {
     76: _.partial(player2Choose, 6),
     186: _.partial(player2Choose, 7)
   }
+  var chooseIngredientFunction = playerKeyMap[event.keyCode];
+  if (event.keyCode === 32) {
+    pauseOrUnpause();
+  } else if (chooseIngredientFunction && !globalGame.game.paused) {
+    // player chose ingredient
+    chooseIngredientFunction();
+  } else {
+    console.log('unsupported key')
+  }
+}
 
-  // Choose the ingredient
-  playerKeyMap[event.keyCode]();
+function pauseOrUnpause () {
+  // invert
+  globalGame.game.paused = !globalGame.game.paused;
+
+  var paused = globalGame.game.paused;
+
+  // draw the necessary menu
+  if (!paused) {
+    pauseMenu.visible = false;
+  } else {
+    pauseMenu.visible = true;
+  }
 }
 
 module.exports = PlayScene;
