@@ -11,6 +11,7 @@ var Player = function(game, name, id, sprite) {
   this.completedPlates = [];
   this.score = 0;
   this.chosen = false;
+  this.color = '#ff00ff';
 }
 
 Player.prototype.addPlate = function () {
@@ -53,8 +54,19 @@ Player.prototype.populateInventory = function () {
 }
 
 Player.prototype.completePlate = function () {
+  var game = this.game;
+
   this.completedPlates.push(this.plate);
-  this.score += play.ratePlate(this.plate);
+  var plateScore = play.ratePlate(this.plate);
+  this.score += plateScore;
+
+
+  //TODO make this actually align with the player/plate
+  var scoreText = game.add.text( game.width/4 * this.id, 500, plateScore + 'pts!', {fill : this.color, font: "65px Arial"});
+  game.add.tween(scoreText).to({y: 0}, 3000, Phaser.Easing.Linear.None, true);
+  game.add.tween(scoreText).to({alpha: 0}, 3000, Phaser.Easing.Linear.None, true);
+  //TODO actually delete the score text. right now this just sets alpha to 0 effectively making it invisible.
+
   this.plate.kill();
   this.plate = null;
 }
