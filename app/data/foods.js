@@ -14,7 +14,8 @@ var foods = {
     ['fish','chicken',-.5],
     ['peanut butter','gravy',-.4],
     ['peanut butter','caviar',-.8],
-    ['peanut butter','lettuce',-.3]
+    ['peanut butter','lettuce',-.3],
+    ['peanut butter', 'game jam', 1.8]
   ]
 }
 
