@@ -63,7 +63,6 @@ var PlayScene = {
     var background = game.add.sprite(0, 0, 'background');
     var woman = game.add.sprite(this.game.width / 2, 90, 'woman_a');
     var table = game.add.sprite(0, 0, 'table');
-    var conveyor = game.add.sprite(0, 0, 'conveyorbelt');
 
     woman.anchor.set(.5, 0);
     woman.scale.set(5, 5);
@@ -96,14 +95,14 @@ var PlayScene = {
     };
 
     right();
-    
+
     var conveyor = game.add.sprite(0, 0, 'conveyorbelt');
     conveyor.frame = 1;
     conveyor.animations.add('move', [0, 1], 2, true);
     conveyor.animations.play('move');
     //to stop the animation, call conveyor.animations.stop();
     conveyor.anchor.setTo(0.5, 0);
-    
+
     //background.anchor.setTo(0.5, 0.5);
     background.height = this.game.height;
     background.width = this.game.width;
