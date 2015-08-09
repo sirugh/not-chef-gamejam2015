@@ -59,10 +59,6 @@ Plate.prototype.score = function () {
     if (foodItems.indexOf(a) !== -1 &&
       foodItems.indexOf(b) !== -1) {
 
-      if(bonus < 0) {
-        bonus = bonus * 5;
-      }
-
       multipliers[a] = (multipliers[a] || 1) + bonus;
       multipliers[b] = (multipliers[b] || 1) + bonus;
     }

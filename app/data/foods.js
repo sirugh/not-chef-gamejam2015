@@ -1,5 +1,5 @@
 var foods = {
-  combos : [
+  combos : ([
     ['lettuce', 'tomato', .7],
     ['peanut butter', 'banana', .9],
     ['chicken', 'tomato', .8],
@@ -16,17 +16,19 @@ var foods = {
     ['peanut butter','caviar',-.8],
     ['peanut butter','lettuce',-.3],
     ['peanut butter', 'game jam', 1.8]
-  ]
+  ]).map(function(combo) {
+    // Make the negative combos more negative
+    var bonus = combo[combo.length - 1];
+    return combo.slice(0, -1).concat(bonus < 0 ? bonus * 5 : bonus);
+  })
 }
 
 foods.getFoods = function () {
   var included = [];
 
   foods.combos.forEach(function(combo) {
-    included.push(combo[0]);
-    included.push(combo[1]);
-    // todo consider slicing all but the last element and adding it
-    // Set.prototype.add.call(foods, combo.slice(0, combo.length - 1));
+    console.log(combo);
+    included.push.apply(included, combo.slice(0, -1));
   });
 
   return _.uniq(included);
