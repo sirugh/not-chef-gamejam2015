@@ -61,9 +61,6 @@ Match.prototype.addRound = function() {
 }
 Match.prototype.start = function() {
   this.active = true;
-  this.players.forEach(function(player) {
-    player.addPlate();
-  });
   this.addRound();
   this.rounds[0].start();
 }

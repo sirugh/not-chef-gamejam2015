@@ -27,7 +27,6 @@ foods.getFoods = function () {
   var included = [];
 
   foods.combos.forEach(function(combo) {
-    console.log(combo);
     included.push.apply(included, combo.slice(0, -1));
   });
 

@@ -75,17 +75,17 @@ Player.prototype.completePlate = function () {
   this.completedPlates.push(this.plate);
   var plateScore = this.plate.score();
   this.score += plateScore;
-  this.scoreText.setText(this.score);
+  this.scoreText.setText(this.score.toFixed(0));
 
   //TODO make this actually align with the player/plate
-  var scoreText = game.add.text(0, 500, plateScore + 'pts!', {fill : this.color, font: "65px Arial"});
+  var scoreText = game.add.text(0, 500, plateScore.toFixed(0) + 'pts!', {fill : this.color, font: "65px Arial"});
   if (this.id === 1) {
     scoreText.x = 250;
   }else {
     scoreText.x = 750;
   }
-  game.add.tween(scoreText).to({y: 0}, 3000, Phaser.Easing.Linear.None, true);
-  game.add.tween(scoreText).to({alpha: 0}, 3000, Phaser.Easing.Linear.None, true);
+  var tween = game.add.tween(scoreText).to({y: 0, alpha: 0}, 3000, Phaser.Easing.Linear.None, true);
+  tween.onComplete.addOnce(_.bind(function () {game.tweens.remove(tween);}, tween, this.game));
   //TODO actually delete the score text. right now this just sets alpha to 0 effectively making it invisible.
 
   this.plate.kill();

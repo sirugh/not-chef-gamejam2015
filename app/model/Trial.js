@@ -8,7 +8,7 @@ var Trial = function Trial(game, round, id) {
   this.game = game;
   this.round = round;
   this.active = false;
-  this.timer = 7; //in seconds
+  this.timer = 6; //in seconds
   this.players = round.players;
   this.loop = null;
   this.winners = [];
@@ -36,7 +36,7 @@ function updateTimer () {
 
   if (allChosen(this.players)) {
     resetChosen(this.players)
-  } else if (this.timer <= 1) {
+  } else if (this.timer <= 0) {
     this.complete();
   } else {
     this.timer -= 1;
@@ -47,6 +47,9 @@ function updateTimer () {
 }
 
 Trial.prototype.start = function() {
+  this.players.forEach(function(player) {
+    player.addPlate();
+  });
   var self = this;
   this.active = true;
   // once the game is started, start the timer
@@ -85,7 +88,6 @@ Trial.prototype.complete = function() {
 
   this.players.forEach(function(player) {
     player.completePlate();
-    player.addPlate();
   });
   // Bubble up to round.
   this.round.nextTrial();
