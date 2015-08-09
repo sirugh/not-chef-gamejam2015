@@ -96,9 +96,9 @@ Player.prototype.addFoodToPlate = function (food) {
   food.selected = true;
   if (this.inventory.indexOf(food) != -1) {
     this.removeFromInventory(food);
+    this.plate.foodItems.unshift(food.name); // put the food on top
+    this.plate.update();
   }
-  this.plate.foodItems.unshift(food.name); // put the food on top
-  this.plate.update();
 }
 
 Player.prototype.removeFromInventory = function (food) {
