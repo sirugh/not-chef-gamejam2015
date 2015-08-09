@@ -5,7 +5,7 @@ var Round = require('./Round');
 var play = require('../engine/play');
 
 var TRIALS_PER_ROUND = 4;
-var ROUNDS_PER_MATCH = 4;
+var ROUNDS_PER_MATCH = 3;
 var matchNumber = 0;
 
 var Match = function Match(game) {

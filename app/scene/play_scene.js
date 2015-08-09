@@ -61,7 +61,6 @@ var PlayScene = {
     var playerY = game.height + 100;
 
     function getSpriteFor(playerNum) {
-      debugger;
       var x = playerNum === 0 ? playerOneX : playerTwoX;
       var stopFrame = playerNum === 0 ? 7 : 4;
       var playerSprite = game.add.sprite(x, playerY, 'woman_b');
