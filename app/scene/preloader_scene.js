@@ -27,6 +27,7 @@ var PreloaderScene = {
     this.game.load.image('thoughtbubble', 'images/thoughtbubble.png')
 
     this.game.load.spritesheet('conveyorbelt', 'images/conveyor_spritesheet.png', 651, 210);
+    this.game.load.spritesheet('timer', 'images/timer.png', 200, 200);
 
     game.load.audio('music', 'assets/audio/music.mp3');
     soundEffects.forEach(function(sound) {

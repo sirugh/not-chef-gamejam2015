@@ -56,6 +56,12 @@ Trial.prototype.start = function() {
   var style = { font: "65px Arial", fill: "#ff0044"};
   timerText = this.game.add.text(5, 2, this.timer, style);
   this.loop = this.game.time.events.loop(Phaser.Timer.SECOND, _.bind(updateTimer, this, timerText));
+  
+
+  var myTimer = this.game.add.sprite(20, 20, 'timer');
+  myTimer.frame = 0;
+  myTimer.animations.add('time', [0,1,2,3,4,5,6], 1, true);
+  myTimer.animations.play('time');
 
   this.players.forEach(function(player) {
     var xFromCenter = player.plate.group.x - self.game.width / 2;
