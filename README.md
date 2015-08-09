@@ -3,6 +3,7 @@
 A fast-paced game of culinary expertise.
 
 ## Getting Started
+
 1. `npm install`
 1. `npm start`
 1. [http://localhost:3000](http://localhost:3000)
@@ -10,6 +11,7 @@ A fast-paced game of culinary expertise.
 ## How to Play
 
 ### Controls
+
 Player 1:
 - Q => Add ingredient #1 to plate
 - W => Add ingredient #2 to plate
@@ -23,6 +25,7 @@ Player 2:
 - P => Add ingredient #4 to plate
 
 ## Terminology:
+
 Trial = One plate in which a user can add food(s).
 Round = Set of all foods applied to N plates over the course of M trials.
-Game = Sequence of Q rounds.
+Match = Sequence of Q rounds.

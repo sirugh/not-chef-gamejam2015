@@ -6,7 +6,7 @@ var Plate = require('../model/Plate.js');
 module.exports = {
   testRatePlate : function () {
     function printScore(foodItems) {
-      var score = ratePlate(new Plate(foodItems));
+      var score = new Plate(foodItems).score();
       console.log(foodItems + ': ' + score);
     }
 
@@ -17,45 +17,6 @@ module.exports = {
     printScore(['gravy', 'chicken', 'fish']);
     printScore(['peanut butter', 'gravy', 'cheese', 'lettuce']);
     printScore(['chicken', 'gravy', 'lettuce']);
-  },
-
-  ratePlate : function (plate) {
-    var foodItems = plate.foodItems;
-    // Add base point value for plate
-    // Add combos
-
-    var multiplier = 1;
-    var score = 0;
-
-    var multipliers = {};
-
-    foods.combos.forEach( function (combo) {
-      var a = combo[0];
-      var b = combo[1];
-      var bonus = combo[2];
-
-      if (foodItems.indexOf(a) !== -1 &&
-          foodItems.indexOf(b) !== -1) {
-
-        if(bonus < 0) {
-          bonus = bonus * 5;
-        }
-
-        multipliers[a] = (multipliers[a] || 1) + bonus;
-        multipliers[b] = (multipliers[b] || 1) + bonus;
-      }
-    });
-
-    foodItems.forEach( function (food) {
-      score += 10 * (multipliers[food] || 1);
-    });
-
-    return score;
-  },
-
-  createPlayer : function () {
-    var player = { };
-    return player;
   },
 
   chooseFoods : function (count) {
@@ -76,8 +37,21 @@ module.exports = {
 
   isPlateComplete : function (plate) {
     return plate.foodItems.length == 4;
+  },
+
+  leaders : function(players) {
+    var leaders = [];
+    var score = Number.NEGATIVE_INFINITY;
+    players.forEach(function(player) {
+      if (player.score > score) {
+        leaders = [player];
+        score = player.score;
+      } else if (player.score == score) {
+        leaders.push(player);
+      }
+    });
+    return leaders;
   }
 }
 
-window.ratePlate = module.exports.ratePlate;
 window.testRatePlate = module.exports.testRatePlate;

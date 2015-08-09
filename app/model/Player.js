@@ -1,5 +1,5 @@
 var play = require('../engine/play');
-var Plate = require('../model/Plate');
+var Plate = require('./Plate');
 
 var Player = function(game, name, id, sprite, color) {
   this.sprite = sprite;
@@ -12,7 +12,13 @@ var Player = function(game, name, id, sprite, color) {
   this.score = 0;
   this.scoreText;
   this.chosen = false;
+  this.trialsWon = [];
+  this.roundsWon = [];
   this.color = color;
+}
+
+Player.prototype.toString = function() {
+  return "Player " + this.id;
 }
 
 Player.prototype.addPlate = function () {
@@ -31,7 +37,7 @@ Player.prototype.addPlate = function () {
   var label = this.game.add.text(-sprite.width/2 + 130, 0, '');
   sprite.addChild(label);
 
-  var plate = new Plate(play.chooseFoods(2), sprite);
+  var plate = new Plate(play.chooseFoods(2), this, sprite);
   this.plate = plate;
 }
 
@@ -54,9 +60,8 @@ Player.prototype.populateInventory = function () {
 
 Player.prototype.completePlate = function () {
   var game = this.game;
-
   this.completedPlates.push(this.plate);
-  var plateScore = play.ratePlate(this.plate);
+  var plateScore = this.plate.score();
   this.score += plateScore;
   this.scoreText.setText(this.score);
 
@@ -99,8 +104,8 @@ Player.prototype.choose = function (index) {
 }
 
 Player.prototype.reset = function () {
+  // Probably better to just create a new player with the same name?
   this.populateInventory();
-  this.addPlate();
 }
 
 module.exports = Player;

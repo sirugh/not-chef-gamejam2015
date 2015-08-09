@@ -1,8 +1,8 @@
 'use strict';
 var play = require('../engine/play.js');
 var Player = require('../model/Player');
+var Match = require('../model/Match');
 var player1, player2;
-var timerText;
 
 var plate1, plate2, plate3, plate4, selectSquare, splash, splashtext;
 var keyboard;
@@ -19,26 +19,6 @@ var GRID_SIZE = 200;
 var GRID_COLS = 2;
 var SUSPEND = false;
 var MAX_PLATES = 1;
-
-var timer = 10; //in seconds
-function updateTimer () {
-  if (player1.chosen && player2.chosen) {
-    timer = 10; // reset it if both players have chosen!
-    player1.chosen = false;
-    player2.chosen = false;
-  } else if (timer <= 0) {
-    timer = 10; // reset if 0
-    console.log("player 1 [" + player1.score + "]: " + player1.plate.foodItems.toString() + " scored " + play.ratePlate(player1.plate));
-    console.log("player 2 [" + player2.score + "]: " + player2.plate.foodItems.toString() + " scored " + play.ratePlate(player2.plate));
-    player1.completePlate();
-    player2.completePlate();
-    player1.addPlate();
-    player2.addPlate();
-  } else {
-    timer -= 1;
-  }
-  timerText.setText(timer);
-}
 
 function getCoords(game, i) {
   var col = i % GRID_COLS;
@@ -72,6 +52,7 @@ var PlayScene = {
 
     function doTween(thing, state, duration) {
       duration = duration || 3000;
+      console.log(thing);
       var tween = game.add.tween(thing).to(state, 3000, Phaser.Easing.Linear.None, true);
       return tween;
     }
@@ -111,6 +92,18 @@ var PlayScene = {
     table.x = this.game.width / 2;
     table.y = 290;
 
+    // NEW MATCH!
+    var match = new Match(game);
+    window.match = match;
+    player1 = new Player(game, 'Player 1', 1, getSpriteFor(0), '#ff00ff');
+    player2 = new Player(game, 'Player 2', 2, getSpriteFor(1), '#00ffff');
+    players = [player1, player2];
+    match.addPlayer(player1);
+    match.addPlayer(player2);
+
+    // Start the match!
+    match.start();
+
     table.anchor.setTo(0.5, 0);
     conveyor.anchor.setTo(0.5, 0);
 
@@ -136,9 +129,6 @@ var PlayScene = {
 
       return playerSprite;
     }
-
-    player1 = new Player(game, 'Player 1', 1, getSpriteFor(0), '#ff00ff');
-    player1.populateInventory()
 
     var p1ConveyorStart = { x: playerOneX, y : playerY };
     var p1ConveyorEnd = { x: playerOneX + 150, y : playerY - 200 };
@@ -166,17 +156,6 @@ var PlayScene = {
       tweenAndAnimate(player.sprite, animation, tween, _.partial(chooseNext, playerNum));
     }
 
-    player1.addPlate();
-
-    // add player 2
-    player2 = new Player(game, 'Player 2', 2, getSpriteFor(1), '#00ffff');
-    player2.populateInventory();
-
-    player2.addPlate();
-
-    players.push(player1);
-    players.push(player2);
-
     chooseNext(0, 'down');
     chooseNext(1, 'down');
 
@@ -186,10 +165,6 @@ var PlayScene = {
     keyboard = this.game.input.keyboard;
     keyboard.onUpCallback = keyboardEventHandler;
 
-    // once the game is started, start the timer
-    var style = { font: "65px Arial", fill: "#ff0044"};
-    timerText = game.add.text(5, 2, timer, style);
-    game.time.events.loop(Phaser.Timer.SECOND, updateTimer);
     //// End GUI setup
     // Set up player visual inventory
     var self = this;
@@ -233,7 +208,7 @@ var PlayScene = {
       } else {
         player.scoreText.x = 750;
       }
-    })
+    });
   }, //end create
 
   update : function () {
