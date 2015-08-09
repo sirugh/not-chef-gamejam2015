@@ -12,7 +12,7 @@ function update () {
   if (labelSprite) {
     var label = makeString(this.foods);
     labelSprite.setText(label);
-    labelSprite.y = 20 - 30 * this.foods.length;
+    labelSprite.y = 40 - 30 * this.foods.length;
   }
 }
 

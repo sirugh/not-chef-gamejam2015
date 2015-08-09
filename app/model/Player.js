@@ -22,7 +22,7 @@ Player.prototype.addPlate = function () {
   sprite.anchor.setTo(0.5, 0);
 
   // Current ingredients on the plate
-  var label = this.game.add.text(-sprite.width/2 + 10, 20, '');
+  var label = this.game.add.text(-sprite.width/2 + 130, 0, '');
   sprite.addChild(label);
 
   var plate = new Plate(play.chooseIngredients(2), sprite);
