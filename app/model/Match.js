@@ -18,6 +18,13 @@ var Match = function Match(game) {
   this.rounds = []
   this.roundScores = [];
   this.winners = [];
+  this.conveyor = this.game.add.sprite(0, 0, 'conveyorbelt');
+  this.conveyor.frame = 1;
+  this.conveyor.animations.add('move', [0, 1], 2, true);
+  //to stop the animation, call conveyor.animations.stop();
+  this.conveyor.anchor.setTo(0.5, 0);
+  this.conveyor.y = this.game.height - this.conveyor.height + 3;
+  this.conveyor.x = this.game.width / 2;
 };
 
 Match.prototype.toString = function() {
@@ -63,11 +70,13 @@ Match.prototype.start = function() {
   this.active = true;
   this.addRound();
   this.rounds[0].start();
+  this.conveyor.animations.play('move');
 }
 Match.prototype.addPlayer = function(player) {
   this.players.push(player);
 }
 Match.prototype.complete = function() {
+  this.conveyor.animations.stop();
   this.active = false;
   console.log("GAME OVER!!");
 
