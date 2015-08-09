@@ -3,34 +3,50 @@
 var play = require('../engine/play');
 var foods = require('../data/foods.js');
 
-var Plate = function Plate(foodItems, player = null, sprite = null) {
+var Plate = function Plate(foodItems, player = null, group = null) {
   this.foodItems = foodItems;
-  this.sprite = sprite;
+  this.group = group;
   update.call(this);
 };
 
 function update () {
-  var labelSprite = _.find(this.sprite.children, function(child) {
-    return child instanceof Phaser.Text;
+  var self = this;
+
+  // this destroys every time
+  var results = _.filter(this.group.children, function(child) {
+    return !(child instanceof Phaser.Text) &&
+      child.key !== 'plate';
   });
 
-  if (labelSprite) {
-    var label = this.toString();
-    labelSprite.setText(this.foodItems.join('\n'));
-    labelSprite.y = 40 - 30 * this.foodItems.length;
+  results.forEach(function(result) {
+    self.group.removeChild(result);
+    // todo destroy child
+  });
+
+  var offset = -50;
+  addFoodItem('breadbottom');
+  this.foodItems.forEach(addFoodItem);
+  addFoodItem('breadtop');
+
+  function addFoodItem(foodItem) {
+    var item = self.group.create(0, 0, foodItem);
+    item.anchor.set(0.5, 0);
+    item.scale.set(.4, .4);
+    offset += item.height;
+    item.y = -offset;
   }
 }
 
-Plate.prototype.toString = function() {
-  return this.foodItems.join(", ");
-}
+Plate.prototype.kill = function kill () {
+  // todo does this work? we don't actually know...
+  this.group.destroy(true);
+};
 
 Plate.prototype.score = function () {
   var foodItems = this.foodItems;
   // Add base point value for plate
   // Add combos
 
-  var multiplier = 1;
   var score = 0;
 
   var multipliers = {};
@@ -41,7 +57,7 @@ Plate.prototype.score = function () {
     var bonus = combo[2];
 
     if (foodItems.indexOf(a) !== -1 &&
-        foodItems.indexOf(b) !== -1) {
+      foodItems.indexOf(b) !== -1) {
 
       if(bonus < 0) {
         bonus = bonus * 5;
@@ -59,9 +75,6 @@ Plate.prototype.score = function () {
   return score;
 };
 
-Plate.prototype.kill = function kill () {
-  this.sprite.kill();
-};
 Plate.prototype.update = update;
 
 module.exports = Plate;

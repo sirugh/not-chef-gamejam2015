@@ -1,6 +1,8 @@
 var play = require('../engine/play');
 var Plate = require('./Plate');
 
+// todo remove this.game this in favor of an imported game module
+
 var Player = function(game, name, id, sprite, color) {
   this.sprite = sprite;
   this.game = game;
@@ -21,22 +23,26 @@ Player.prototype.toString = function() {
 }
 
 Player.prototype.addPlate = function () {
-  var sprite = this.game.add.sprite(this.game.width / 2, 0, 'plate');
+  var group = this.game.add.group();
+  group.x = this.game.width / 2;
+  group.y = 0;
+
+  var sprite = group.create(0, 0, 'plate');
 
   // position the plate
-  sprite.y = this.game.height - sprite.height;
+  group.y = this.game.height - sprite.height;
   if (this.id === 1) {
-    sprite.x = this.game.width / 4;
+    group.x = this.game.width / 4 + 105;
   } else {
-    sprite.x = (this.game.width / 4) * 3;
+    group.x = (this.game.width / 4) * 3 - 105;
   }
   sprite.anchor.setTo(0.5, 0);
 
   // Current ingredients on the plate
-  var label = this.game.add.text(-sprite.width/2 + 130, 0, '');
-  sprite.addChild(label);
+  var label = new Phaser.Text(this.game, -sprite.width/2 + 130, 0, '');
+  group.add(label);
 
-  var plate = new Plate(play.chooseFoods(2), this, sprite);
+  var plate = new Plate(play.chooseFoods(2), this, group);
   this.plate = plate;
 }
 

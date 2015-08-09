@@ -1,6 +1,9 @@
+var gameWrapper = require('../game');
+
 var PreloaderScene = {
   preload: function () {
     var game = this.game;
+    gameWrapper.game = this.game;
     this.loadingBar = this.game.add.sprite(0, 240, 'preloader_bar');
     this.loadingBar.anchor.setTo(0, 0.5);
     this.load.setPreloadSprite(this.loadingBar);
