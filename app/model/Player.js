@@ -80,8 +80,11 @@ Player.prototype.completePlate = function () {
   this.plate = null;
 }
 
-Player.prototype.addIngredientToPlate = function (food) {
-  this.removeFromInventory(food);
+Player.prototype.addFoodToPlate = function (food) {
+  food.selected = true;
+  if (this.inventory.indexOf(food) != -1) {
+    this.removeFromInventory(food);
+  }
   this.plate.foodItems.unshift(food.name); // put the food on top
   this.plate.update();
 }
@@ -89,14 +92,13 @@ Player.prototype.addIngredientToPlate = function (food) {
 Player.prototype.removeFromInventory = function (food) {
   food.sprite.alpha = .1;
   food.sprite.children[0].alpha = .1;
-  food.selected = true;
 }
 
 Player.prototype.choose = function (index) {
   var food = this.inventory[index];
   if (!food.selected) {
     console.log('%s selected %s', this.name, food.name);
-    this.addIngredientToPlate(food);
+    this.addFoodToPlate(food);
     this.chosen = true;
   } else {
     console.log('%s already chosen!', food.name);
