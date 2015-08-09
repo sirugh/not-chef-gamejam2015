@@ -29,11 +29,16 @@ Player.prototype.addPlate = function () {
   this.plate = plate;
 }
 
-Player.prototype.populateInventory = function (constructSprite) {
+Player.prototype.populateInventory = function () {
+  var self = this;
   this.inventory = _.map(play.chooseIngredients(4), function(name) {
     return {
       name : name,
-      sprite : constructSprite(name)
+      sprite : function (text) {
+        var sprite = self.game.add.text(0, 0, text);
+        sprite.anchor.setTo(self.id - 1,.5);
+        return sprite;
+      }(name)
     }
   });
 }

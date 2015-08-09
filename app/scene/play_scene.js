@@ -64,21 +64,13 @@ var PlayScene = {
 
     // add player 1
     player1 = new Player(game, 'Player 1', 1);
-    player1.populateInventory(function (text) {
-      var sprite = game.add.text(0, 0, text);
-      sprite.anchor.setTo(0,.5);
-      return sprite;
-    });
+    player1.populateInventory()
 
     player1.addPlate();
 
     // add player 2
     player2 = new Player(game, 'Player 2', 2);
-    player2.populateInventory(function (text) {
-      var sprite = game.add.text(0, 0, text);
-      sprite.anchor.setTo(1,.5);
-      return sprite;
-    });
+    player2.populateInventory();
 
     player2.addPlate();
 
@@ -101,16 +93,6 @@ var PlayScene = {
   update : function () {
     var game = this.game;
     var self = this;
-    // while(plates.length < MAX_PLATES) {
-    //   // add plates
-    //   var sprite = this.game.add.sprite(this.game.width / 2, 0, 'plate');
-    //   sprite.y = this.game.height - spr2ite.height;
-    //   sprite.anchor.setTo(0.5, 0);
-    //   var label = this.game.add.text(-sprite.width/2 + 10, 20, '');
-    //   sprite.addChild(label);
-    //   plates.push(play.createPlate(sprite, 4 - players.length));
-    //   console.log(plates);
-    // }
 
     // Wrap this in some conditional
     players[0].inventory.forEach(function(food, i) {
