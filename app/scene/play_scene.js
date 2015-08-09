@@ -188,7 +188,7 @@ var PlayScene = {
 
     // once the game is started, start the timer
     var style = { font: "65px Arial", fill: "#ff0044"};
-    timerText = game.add.text(game.world.centerX, 2, timer, style);
+    timerText = game.add.text(5, 2, timer, style);
     game.time.events.loop(Phaser.Timer.SECOND, updateTimer);
     //// End GUI setup
     // Set up player visual inventory
@@ -226,11 +226,11 @@ var PlayScene = {
       sprite.addChild(label);
     });
     _(players).each(function (player) {
+      var playerScoreStyle = {fill : player.color, font: '65px Arial'};
+      player.scoreText = game.add.text(0,0, '0', playerScoreStyle);
       if (player.id === 1) {
-        player.scoreText = game.add.text(0,0, '0', {fill : player.color});
         player.scoreText.x = 250;
       } else {
-        player.scoreText = game.add.text(0,0, '0', {fill : player.color});
         player.scoreText.x = 750;
       }
     })

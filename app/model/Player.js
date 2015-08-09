@@ -41,11 +41,7 @@ Player.prototype.populateInventory = function () {
     return {
       name : name,
       sprite : function (text) {
-        /*var sprite = self.game.add.text(0, 0, text);*/
-        
-        var sprite = self.game.add.sprite(0, 0, text);
-        sprite.width = 200;
-        sprite.height = 50;
+        var sprite = self.game.add.text(0, 0, text, {fill : '#ffffff'});
         sprite.anchor.setTo(self.id - 1,.5);
         return sprite;
       }(name),
