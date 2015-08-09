@@ -1,4 +1,5 @@
 var gameWrapper = require('../game');
+var soundEffects = require('../soundEffects');
 
 var PreloaderScene = {
   preload: function () {
@@ -26,6 +27,11 @@ var PreloaderScene = {
     this.game.load.image('thoughtbubble', 'images/thoughtbubble.png')
 
     this.game.load.spritesheet('conveyorbelt', 'images/conveyor_spritesheet.png', 651, 210);
+
+    soundEffects.forEach(function(sound) {
+      console.log(sound);
+      game.load.audio(sound, 'assets/audio/' + sound + '.mp3');
+    });
 
     this.game.load.image('banana', 'images/banana.png');
     this.game.load.image('fish', 'images/fish.png');

@@ -3,6 +3,7 @@ var play = require('../engine/play.js');
 var Player = require('../model/Player');
 var Match = require('../model/Match');
 var dinerThoughts = require('../data/dinerThoughts');
+var soundEffects = require('../soundEffects');
 var globalGame = require('../game');
 var player1, player2;
 
@@ -54,14 +55,25 @@ var PlayScene = {
     woman.animations.add('stop', [1]);
 
     setTimeout(animateRight, Math.random() * 20 * 1000);
-    setTimeout(think, Math.random() * 20 * 1000);
+    think(true);
+    playSoundEffect(true);
 
-    function think () {
-      thoughtText.setText(dinerThoughts[Math.floor(Math.random() * dinerThoughts.length)]);
-      womanThought.visible = true;
-      setTimeout(function() {
-        womanThought.visible = false;
-      }, 5000);
+    function playSoundEffect(skip) {
+      if(!skip) {
+        game.add.audio(soundEffects[Math.floor(Math.random() * soundEffects.length)]).play();
+      }
+
+      setTimeout(playSoundEffect, Math.random() * 10 * 1000 + 2000);
+    }
+
+    function think (skip) {
+      if(skip) {
+        thoughtText.setText(dinerThoughts[Math.floor(Math.random() * dinerThoughts.length)]);
+        womanThought.visible = true;
+        setTimeout(function() {
+          womanThought.visible = false;
+        }, 5000);
+      }
       setTimeout(think, 1000 * (Math.random() * 20 + 10));
     }
 
