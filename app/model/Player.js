@@ -1,8 +1,32 @@
 var play = require('../engine/play');
-var Player = function(game, name) {
+var Plate = require('../model/Plate');
+
+var Player = function(game, name, id) {
+  this.game = game;
   this.name = name;
+  this.id = id;
   this.inventory = null;
-  this.chosen = false;
+  this.plate = null;
+}
+
+Player.prototype.addPlate = function () {
+  var sprite = this.game.add.sprite(this.game.width / 2, 0, 'plate');
+
+  // position the plate
+  sprite.y = this.game.height - sprite.height;
+  if (this.id === 1) {
+    sprite.x = this.game.width / 4;
+  } else {
+    sprite.x = (this.game.width / 4) * 3;
+  }
+  sprite.anchor.setTo(0.5, 0);
+
+  // Current ingredients on the plate
+  var label = this.game.add.text(-sprite.width/2 + 10, 20, '');
+  sprite.addChild(label);
+
+  var plate = new Plate(play.chooseIngredients(2), sprite);
+  this.plate = plate;
 }
 
 Player.prototype.populateInventory = function (constructSprite) {
@@ -14,10 +38,10 @@ Player.prototype.populateInventory = function (constructSprite) {
   });
 }
 
-Player.prototype.addIngredient = function (food, plate) {
+Player.prototype.addIngredient = function (food) {
   this.removeFromInventory(food);
-  plate.foods.push(food.name);
-  plate.update();
+  this.plate.foods.push(food.name);
+  this.plate.update();
 }
 
 Player.prototype.removeFromInventory = function (food) {
@@ -28,9 +52,8 @@ Player.prototype.removeFromInventory = function (food) {
 
 Player.prototype.choose = function (index) {
   var food = this.inventory[index];
-  this.addIngredient(food, plates[0]);
+  this.addIngredient(food);
   console.log('%s selected %s', this.name, food.name);
-  this.chosen = true;
      /*var tween = this.game.add.tween(newFood, this.game, this.game.tweens);
   //   tween.to({
   //     x: 200,

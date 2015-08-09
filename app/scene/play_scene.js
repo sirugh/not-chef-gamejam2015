@@ -9,7 +9,6 @@ var keyboard;
 
 var sprite;
 var players = [];
-var plates = [];
 var foods = [
   ["plate1", "plate2"],
   ["plate3", "plate4"]
@@ -19,7 +18,6 @@ var foods = [
 var GRID_SIZE = 200;
 var GRID_COLS = 2;
 var SUSPEND = false;
-var MAX_PLATES = 1;
 
 var timer = 10; //in seconds
 function updateTimer () {
@@ -65,25 +63,27 @@ var PlayScene = {
     conveyor.x = this.game.width / 2;
 
     // add player 1
-    player1 = new Player(game, 'player1');
+    player1 = new Player(game, 'Player 1', 1);
     player1.populateInventory(function (text) {
       var sprite = game.add.text(0, 0, text);
       sprite.anchor.setTo(0,.5);
       return sprite;
     });
 
+    player1.addPlate();
+
     // add player 2
-    player2 = new Player(game, 'player2');
+    player2 = new Player(game, 'Player 2', 2);
     player2.populateInventory(function (text) {
       var sprite = game.add.text(0, 0, text);
       sprite.anchor.setTo(1,.5);
       return sprite;
     });
 
+    player2.addPlate();
+
     players.push(player1);
     players.push(player2);
-    window.players = players;
-    window.plates = plates;
 
     //// Set up GUI
     SUSPEND = false;
@@ -101,17 +101,16 @@ var PlayScene = {
   update : function () {
     var game = this.game;
     var self = this;
-    while(plates.length < MAX_PLATES) {
-      // add plates
-      var sprite = this.game.add.sprite(this.game.width / 2,
-                                        0, 'plate');
-      sprite.y = this.game.height - sprite.height;
-      sprite.anchor.setTo(0.5, 0);
-      var label = this.game.add.text(-sprite.width/2 + 10, 20, '');
-      sprite.addChild(label);
-      plates.push(play.createPlate(sprite, 4 - players.length));
-      console.log(plates);
-    }
+    // while(plates.length < MAX_PLATES) {
+    //   // add plates
+    //   var sprite = this.game.add.sprite(this.game.width / 2, 0, 'plate');
+    //   sprite.y = this.game.height - spr2ite.height;
+    //   sprite.anchor.setTo(0.5, 0);
+    //   var label = this.game.add.text(-sprite.width/2 + 10, 20, '');
+    //   sprite.addChild(label);
+    //   plates.push(play.createPlate(sprite, 4 - players.length));
+    //   console.log(plates);
+    // }
 
     // Wrap this in some conditional
     players[0].inventory.forEach(function(food, i) {
