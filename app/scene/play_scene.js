@@ -95,23 +95,33 @@ var PlayScene = {
     timerText = game.add.text(5, 2, timer, style);
     game.time.events.loop(Phaser.Timer.SECOND, updateTimer);
     //// End GUI setup
-  },
-
-  update : function () {
-    var game = this.game;
+    // Set up player visual inventory
     var self = this;
-
-    // Wrap this in some conditional
+    var sprite;
     players[0].inventory.forEach(function(food, i) {
-      food.sprite.x = 10;
-      food.sprite.y = i * food.sprite.height + self.world.height/2;
+      sprite = food.sprite;
+      // create sprite
+      sprite.x = 50;
+      sprite.y = i * sprite.height + self.world.height/2;
+
+      // create label
+      var label = self.game.add.text(-30, -sprite.height/2, '#');
+      sprite.addChild(label);
     });
 
     players[1].inventory.forEach(function (food, i) {
-      food.sprite.x = self.world.width - 10;
-      food.sprite.y = i * food.sprite.height + self.world.height/2;
+      sprite = food.sprite;
+      sprite.x = self.world.width - 50;
+      sprite.y = i * sprite.height + self.world.height/2;
+
+      // create label
+      var label = self.game.add.text(10, -sprite.height/2, '#');
+      sprite.addChild(label);
     });
 
+  },
+
+  update : function () {
     // TODO: Put something here.
     if(SUSPEND) {
       //remove usual keyboard listeners

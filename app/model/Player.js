@@ -40,7 +40,8 @@ Player.prototype.populateInventory = function () {
         var sprite = self.game.add.text(0, 0, text);
         sprite.anchor.setTo(self.id - 1,.5);
         return sprite;
-      }(name)
+      }(name),
+      selected : false
     }
   });
 }
@@ -59,16 +60,22 @@ Player.prototype.addIngredientToPlate = function (food) {
 }
 
 Player.prototype.removeFromInventory = function (food) {
-  food.sprite.alpha = 0;
-  var index = _(this.inventory).findIndex({name : food.name});
-  this.inventory.splice(index, 1);
+  food.sprite.alpha = .1;
+  food.sprite.children[0].alpha = .1;
+  food.selected = true;
+  // var index = _(this.inventory).findIndex({name : food.name});
+  // this.inventory.splice(index, 1);
 }
 
 Player.prototype.choose = function (index) {
   var food = this.inventory[index];
-  this.addIngredientToPlate(food);
-  console.log('%s selected %s', this.name, food.name);
-     /*var tween = this.game.add.tween(newFood, this.game, this.game.tweens);
+  if (!food.selected) {
+    console.log('%s selected %s', this.name, food.name);
+    this.addIngredientToPlate(food);
+  } else {
+    console.log('%s already chosen!', food.name);
+  }
+  /*var tween = this.game.add.tween(newFood, this.game, this.game.tweens);
   //   tween.to({
   //     x: 200,
   //     y: 0
@@ -79,6 +86,11 @@ Player.prototype.choose = function (index) {
   //     target.kill();
   //   }*/
   // }
+}
+
+Player.prototype.reset = function () {
+  this.populateInventory();
+  this.addPlate();
 }
 
 module.exports = Player;
