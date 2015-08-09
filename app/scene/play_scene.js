@@ -14,24 +14,6 @@ var foodItems = [
   ["plate3", "plate4"]
 ];
 
-//constants
-var GRID_SIZE = 200;
-var GRID_COLS = 2;
-var SUSPEND = false;
-var MAX_PLATES = 1;
-
-function getCoords(game, i) {
-  var col = i % GRID_COLS;
-  var row = Math.floor(i / GRID_COLS);
-  var x = game.world.centerX + (col * GRID_SIZE);
-  var y = game.world.centerY + (row * GRID_SIZE);
-  return [x, y];
-}
-
-function getIndex(x, y) {
-  return y * GRID_COLS + x;
-}
-
 var PlayScene = {
   preload : function () {
   },
@@ -65,54 +47,21 @@ var PlayScene = {
       }, this);
     }
 
-    window.right = function() {
+    function animateRight () {
       var tweenRight = doTween(woman, { x: game.width / 2 + 150 })
-      tweenAndAnimate(woman, 'right', tweenRight, left);
+      tweenAndAnimate(woman, 'right', tweenRight, animateLeft);
     };
-    window.left = function() {
+    function animateLeft () {
       var tweenLeft = doTween(woman, { x: game.width / 2 - 150 });
-      tweenAndAnimate(woman, 'left', tweenLeft, right);
+      tweenAndAnimate(woman, 'left', tweenLeft, animateRight);
     };
-
-    right();
-
-    var conveyor = game.add.sprite(0, 0, 'conveyorbelt');
-    conveyor.frame = 1;
-    conveyor.animations.add('move', [0, 1], 2, true);
-    conveyor.animations.play('move');
-    //to stop the animation, call conveyor.animations.stop();
-    conveyor.anchor.setTo(0.5, 0);
-
-    //background.anchor.setTo(0.5, 0.5);
-    background.height = this.game.height;
-    background.width = this.game.width;
-    conveyor.y = this.game.height - conveyor.height + 3;
-    conveyor.x = this.game.width / 2;
-    table.x = this.game.width / 2;
-    table.y = 290;
-
-    // NEW MATCH!
-    var match = new Match(game);
-    window.match = match;
-    player1 = new Player(game, 'Player 1', 1, getSpriteFor(0), '#ff00ff');
-    player2 = new Player(game, 'Player 2', 2, getSpriteFor(1), '#00ffff');
-    players = [player1, player2];
-    match.addPlayer(player1);
-    match.addPlayer(player2);
-
-    // Start the match!
-    match.start();
-
-    table.anchor.setTo(0.5, 0);
-    conveyor.anchor.setTo(0.5, 0);
-
-    // add player 1
 
     var playerOneX = 150;
     var playerTwoX = game.width - 150;
     var playerY = game.height + 100;
 
     function getSpriteFor(playerNum) {
+      debugger;
       var x = playerNum === 0 ? playerOneX : playerTwoX;
       var stopFrame = playerNum === 0 ? 7 : 4;
       var playerSprite = game.add.sprite(x, playerY, 'woman_b');
@@ -129,12 +78,39 @@ var PlayScene = {
       return playerSprite;
     }
 
+    var conveyor = game.add.sprite(0, 0, 'conveyorbelt');
+    conveyor.frame = 1;
+    conveyor.animations.add('move', [0, 1], 2, true);
+    conveyor.animations.play('move');
+    //to stop the animation, call conveyor.animations.stop();
+    conveyor.anchor.setTo(0.5, 0);
+
+    //background.anchor.setTo(0.5, 0.5);
+    background.height = this.game.height;
+    background.width = this.game.width;
+    conveyor.y = this.game.height - conveyor.height + 3;
+    conveyor.x = this.game.width / 2;
+    table.x = this.game.width / 2;
+    table.y = 290;
+    table.anchor.setTo(0.5, 0);
+
+    // NEW MATCH!
+    var match = new Match(game);
+    window.match = match;
+    player1 = new Player(game, 'Player 1', 1, getSpriteFor(0), '#ff00ff');
+    player2 = new Player(game, 'Player 2', 2, getSpriteFor(1), '#00ffff');
+    players = [player1, player2];
+    match.addPlayer(player1);
+    match.addPlayer(player2);
+
+    // Start the match!
+    match.start();
+
     var p1ConveyorStart = { x: playerOneX, y : playerY };
     var p1ConveyorEnd = { x: playerOneX + 150, y : playerY - 200 };
     var p2ConveyorStart = { x: playerTwoX, y : playerY };
     var p2ConveyorEnd = { x: playerTwoX - 150, y : playerY - 200 };
     var p1ConveyorEndScale = { x: 6.5, y: 6.5};
-
 
     function chooseNext(playerNum, lastAnimation) {
       var tween, tweenOptions, animation;
@@ -159,31 +135,13 @@ var PlayScene = {
     chooseNext(1, 'down');
 
     //// Set up GUI
-    SUSPEND = false;
-
     keyboard = this.game.input.keyboard;
     keyboard.onUpCallback = keyboardEventHandler;
-
     //// End GUI setup
   }, //end create
 
-  update : function () {
-    // TODO: Put something here.
-    if(SUSPEND) {
-      //remove usual keyboard listeners
-      keyboard.onUpCallback = unsuspendHandler;
-    }
-  }
+  update : function () { }
 };
-
-function unsuspendHandler(event) {
-  // set SUSPEND to false
-  SUSPEND = false;
-  // restore usual handlers
-  keyboard.onUpCallback = keyboardEventHandler;
-  splash.kill();
-  splashtext.kill();
-}
 
 function keyboardEventHandler(event) {
   //player logic
