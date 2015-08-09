@@ -15,7 +15,11 @@ var PreloaderScene = {
     this.game.load.image('select', 'images/selectSquare.png')
     this.game.load.image('background', 'images/bg.png')
     this.game.load.image('plate', 'images/plate.png')
+    this.game.load.image('table', 'images/table.png')
     this.game.load.image('conveyorbelt', 'images/conveyorbelt.png')
+    this.game.load.spritesheet('woman_a', 'images/woman_a.png', 48, 64);
+    this.game.load.spritesheet('woman_b', 'images/woman_b.png', 48, 64);
+    this.game.load.spritesheet('man', 'images/man.png', 70, 70);
 
     game.load.atlas('xbox360', 'assets/controllers/xbox360.png', 'assets/controllers/xbox360.json');
   },

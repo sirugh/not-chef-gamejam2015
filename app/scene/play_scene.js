@@ -61,13 +61,32 @@ var PlayScene = {
     game.stage.backgroundColor = '#2d2d2d';
 
     var background = game.add.sprite(0, 0, 'background');
+    var woman = game.add.sprite(this.game.width / 2, 90, 'woman_a');
+    var table = game.add.sprite(0, 0, 'table');
     var conveyor = game.add.sprite(0, 0, 'conveyorbelt');
-    conveyor.anchor.setTo(0.5, 0);
-    //background.anchor.setTo(0.5, 0.5);
+
+    woman.scale.set(5, 5);
+    woman.animations.add('left', [3, 4, 5, 4]);
+    woman.animations.add('right', [6, 7, 8, 7]);
+
+    window.right = function() {
+      woman.animations.play('right', 3, true);
+      // todo tween
+    };
+    window.left = function() {
+      woman.animations.play('left', 3, true);
+      // todo tween
+    };
+
     background.height = this.game.height;
     background.width = this.game.width;
     conveyor.y = this.game.height - conveyor.height + 3;
     conveyor.x = this.game.width / 2;
+    table.x = this.game.width / 2;
+    table.y = 290;
+
+    table.anchor.setTo(0.5, 0);
+    conveyor.anchor.setTo(0.5, 0);
 
     // add player 1
     player1 = new Player(game, 'Player 1', 1);
