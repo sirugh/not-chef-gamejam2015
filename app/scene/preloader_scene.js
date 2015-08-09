@@ -28,8 +28,8 @@ var PreloaderScene = {
 
     this.game.load.spritesheet('conveyorbelt', 'images/conveyor_spritesheet.png', 651, 210);
 
+    game.load.audio('music', 'assets/audio/music.mp3');
     soundEffects.forEach(function(sound) {
-      console.log(sound);
       game.load.audio(sound, 'assets/audio/' + sound + '.mp3');
     });
 

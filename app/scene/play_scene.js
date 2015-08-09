@@ -23,6 +23,11 @@ var PlayScene = {
     globalGame.game = game;
     game.stage.backgroundColor = '#2d2d2d';
 
+    var music = game.add.audio('music').play();
+    music.volume = 0.3;
+    music.loop = true;
+    music.play();
+
     var background = game.add.sprite(0, 0, 'background');
     var womanThought = game.add.group();
     var thoughtText = new Phaser.Text(game, 10, 10, '');
@@ -60,7 +65,8 @@ var PlayScene = {
 
     function playSoundEffect(skip) {
       if(!skip) {
-        game.add.audio(soundEffects[Math.floor(Math.random() * soundEffects.length)]).play();
+        var soundEffect = game.add.audio(soundEffects[Math.floor(Math.random() * soundEffects.length)]).play();
+        soundEffect.volume = .2;
       }
 
       setTimeout(playSoundEffect, Math.random() * 10 * 1000 + 2000);
