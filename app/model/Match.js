@@ -86,19 +86,20 @@ Match.prototype.complete = function() {
   })
 
   // Calculate by pure score:
-//  this.winners = play.leaders(this.players);
+  this.winners = play.leaders(this.players);
   // Calculate by rounds won:
-  this.winners = this.players.reduce(function(winners, player, idx, players) {
-    var roundCount = player.roundsWon.length;
-    var highScore = winners[0];
-    if (roundCount > highScore) {
-      return [roundCount, [player]];
-    } else if (roundCount == highScore) {
-      return [highScore, winners[1].concat(player)];
-    }
-    return winners;
-  }, [Number.NEGATIVE_INFINITY, []])[1];
+//  this.winners = this.players.reduce(function(winners, player, idx, players) {
+//    var roundCount = player.roundsWon.length;
+//    var highScore = winners[0];
+//    if (roundCount > highScore) {
+//      return [roundCount, [player]];
+//    } else if (roundCount == highScore) {
+//      return [highScore, winners[1].concat(player)];
+//    }
+//    return winners;
+//  }, [Number.NEGATIVE_INFINITY, []])[1];
 
+  this.game.gameOverScreen.display(this.winners);
   console.log("WINNER(S): " + this.winners);
   console.log("ROLL END CREDITS");
 }

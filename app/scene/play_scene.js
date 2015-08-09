@@ -13,7 +13,6 @@ var keyboard;
 var sprite;
 var players = [];
 
-var pauseMenu;
 var PlayScene = {
   preload : function () {
   },
@@ -153,6 +152,7 @@ var PlayScene = {
 
     // NEW MATCH!
     var match = new Match(game);
+    this.game.match = match;
     window.match = match;
     player1 = new Player(game, 'Player 1', 1, getSpriteFor(0), '#ff00ff');
     player2 = new Player(game, 'Player 2', 2, getSpriteFor(1), '#00ffff');
@@ -196,9 +196,31 @@ var PlayScene = {
     keyboard.onUpCallback = keyboardEventHandler;
     //// End GUI setup
     // game starts as paused
-    pauseMenu = game.add.text(game.world.centerX, game.world.centerY + 50, 'PRESS SPACE TO START', {fill : '#ffffff'});
+    var pauseMenu = game.add.text(game.world.centerX, game.world.centerY + 50, 'PRESS SPACE TO START', {fill : '#ffffff'});
     pauseMenu.anchor.setTo(.5,.5);
+    this.game.pauseMenu = pauseMenu;
     pauseOrUnpause();
+
+    var gameOverScreen = this.game.add.sprite(this.game.width / 2, this.game.height / 2, 'splash');
+    gameOverScreen.visible = true;
+    gameOverScreen.anchor.setTo(.5,.5);
+    gameOverScreen.z = 100;
+    var gameOverText = this.game.add.text(0, -50, 'Game Over!');
+    var gameOverWinner = this.game.add.text(0, 0, 'Winner is: ');
+    gameOverText.anchor.setTo(.5,.5);
+    gameOverWinner.anchor.setTo(.5,.5);
+    gameOverScreen.addChild(gameOverText);
+    gameOverScreen.addChild(gameOverWinner);
+    gameOverScreen.visible = false;
+    gameOverScreen.display = function(winners) {
+      gameOverWinner.text = 'Winner is: ' + winners;
+      this.visible = true;
+      this.game.pauseMenu.visible = true;
+    };
+    gameOverScreen.hide = function() {
+      this.visible = false;
+    };
+    this.game.gameOverScreen = gameOverScreen;
   }, //end create
 };
 
@@ -247,9 +269,13 @@ function pauseOrUnpause () {
 
   // draw the necessary menu
   if (!paused) {
-    pauseMenu.visible = false;
+    globalGame.game.pauseMenu.visible = false;
   } else {
-    pauseMenu.visible = true;
+    globalGame.game.pauseMenu.visible = true;
+  }
+
+  if (!globalGame.game.match.active) {
+    console.log("A new game should start now...")
   }
 }
 
