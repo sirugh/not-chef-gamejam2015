@@ -1,7 +1,8 @@
 var play = require('../engine/play');
 var Plate = require('../model/Plate');
 
-var Player = function(game, name, id) {
+var Player = function(game, name, id, sprite) {
+  this.sprite = sprite;
   this.game = game;
   this.name = name;
   this.id = id;

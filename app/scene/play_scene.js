@@ -71,23 +71,28 @@ var PlayScene = {
     woman.animations.add('right', [6, 7, 8, 7]);
     woman.animations.add('stop', [1]);
 
-    window.right = function() {
-      var tweenRight = game.add.tween(woman).to({ x: game.width / 2 + 150 }, 3000, Phaser.Easing.Linear.None, true);
-      woman.animations.play('right', 3, true);
-      tweenRight.onComplete.addOnce(function () {
-        woman.animations.stop('right', true);
-        woman.animations.play('stop');
-        setTimeout(left, Math.random() * 20 * 1000);
+    function doTween(thing, state, duration) {
+      duration = duration || 3000;
+      var tween = game.add.tween(thing).to(state, 3000, Phaser.Easing.Linear.None, true);
+      return tween;
+    }
+
+    function tweenAndAnimate(sprite, animation, tween, doNext) {
+      sprite.animations.play(animation, 3, true);
+      tween.onComplete.addOnce(function () {
+        sprite.animations.stop(animation, true);
+        sprite.animations.play('stop');
+        setTimeout(_.partial(doNext, animation), Math.random() * 20 * 1000);
       }, this);
+    }
+
+    window.right = function() {
+      var tweenRight = doTween(woman, { x: game.width / 2 + 150 })
+      tweenAndAnimate(woman, 'right', tweenRight, left);
     };
     window.left = function() {
-      var tweenLeft = game.add.tween(woman).to({ x: game.width / 2 - 150 }, 3000, Phaser.Easing.Linear.None, true);
-      woman.animations.play('left', 3, true);
-      tweenLeft.onComplete.addOnce(function () {
-        woman.animations.stop('left', true);
-        woman.animations.play('stop');
-        setTimeout(right, Math.random() * 20 * 1000);
-      }, this);
+      var tweenLeft = doTween(woman, { x: game.width / 2 - 150 });
+      tweenAndAnimate(woman, 'left', tweenLeft, right);
     };
 
     right();
@@ -103,19 +108,70 @@ var PlayScene = {
     conveyor.anchor.setTo(0.5, 0);
 
     // add player 1
-    player1 = new Player(game, 'Player 1', 1);
+
+    var playerOneX = 150;
+    var playerTwoX = game.width - 150;
+    var playerY = game.height + 100;
+
+    function getSpriteFor(playerNum) {
+      var x = playerNum === 0 ? playerOneX : playerTwoX;
+      var stopFrame = playerNum === 0 ? 7 : 4;
+      var playerSprite = game.add.sprite(x, playerY, 'woman_b');
+
+      playerSprite.anchor.set(.5, 1);
+      playerSprite.scale.set(7, 7);
+      //playerSprite.animations.add('left', [3, 4, 5, 4]);
+      playerSprite.animations.add('stop', [stopFrame]);
+      playerSprite.animations.add('up', [9, 10, 11]);
+      playerSprite.animations.add('down', [0, 1, 2]);
+
+      playerSprite.animations.play('stop');
+
+      return playerSprite;
+    }
+
+    player1 = new Player(game, 'Player 1', 1, getSpriteFor(0));
     player1.populateInventory()
+
+    var p1ConveyorStart = { x: playerOneX, y : playerY };
+    var p1ConveyorEnd = { x: playerOneX + 150, y : playerY - 200 };
+    var p2ConveyorStart = { x: playerTwoX, y : playerY };
+    var p2ConveyorEnd = { x: playerTwoX - 150, y : playerY - 200 };
+    var p1ConveyorEndScale = { x: 6.5, y: 6.5};
+
+
+    function chooseNext(playerNum, lastAnimation) {
+      var tween, tweenOptions, animation;
+      var player = playerNum === 0 ? player1 : player2;
+
+      switch(lastAnimation) {
+        case 'up':
+          tweenOptions = playerNum === 0 ? p1ConveyorStart : p2ConveyorStart;
+          animation = 'down';
+          break;
+        case 'down':
+          tweenOptions = playerNum === 0 ? p1ConveyorEnd : p2ConveyorEnd;
+          animation = 'up';
+          break;
+      }
+
+      tween = doTween(player.sprite, tweenOptions);
+      tweenAndAnimate(player.sprite, animation, tween, _.partial(chooseNext, playerNum));
+    }
 
     player1.addPlate();
 
     // add player 2
-    player2 = new Player(game, 'Player 2', 2);
+    player2 = new Player(game, 'Player 2', 2, getSpriteFor(1));
     player2.populateInventory();
 
     player2.addPlate();
 
     players.push(player1);
     players.push(player2);
+
+    chooseNext(0, 'down');
+    chooseNext(1, 'down');
 
     //// Set up GUI
     SUSPEND = false;
