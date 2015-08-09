@@ -53,7 +53,8 @@ Player.prototype.populateInventory = function () {
     });
   }
   var self = this;
-  this.inventory = _.map(play.chooseFoods(4), function(name) {
+  var numIngredients = 8; // cause we have 10 and we apply 2 to the plate
+  this.inventory = _.map(play.chooseFoods(numIngredients), function(name) {
     return {
       name : name,
       sprite : function (text) {
@@ -126,7 +127,11 @@ Player.prototype.graphics = function() {
     0: ['Q', 'U'],
     1: ['W', 'I'],
     2: ['E', 'O'],
-    3: ['R', 'P']
+    3: ['R', 'P'],
+    4: ['A', 'J'],
+    5: ['S', 'K'],
+    6: ['D', 'L'],
+    7: ['F', ';']
   }
 
   var spriteX;

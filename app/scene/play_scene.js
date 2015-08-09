@@ -158,43 +158,33 @@ var PlayScene = {
 
 function keyboardEventHandler(event) {
   //player logic
-  var player1KeyMap = {
-    81: 'Q',
-    87: 'W',
-    69: 'E',
-    82: 'R'
-  }
-  var player2KeyMap = {
-    85: 'U',
-    73: 'I',
-    79: 'O',
-    80: 'P'
-  }
-  if ( _(Object.keys(player1KeyMap)).contains(event.keyCode.toString()) ) {
-    var key = player1KeyMap[event.keyCode];
-    if(key === 'Q') {
-      player1.choose(0);
-    } else if (key === 'W') {
-      player1.choose(1);
-    } else if (key === 'E') {
-      player1.choose(2);
-    } else if (key === 'R') {
-      player1.choose(3);
-    }
+  var player1Choose = _.bind(player1.choose, player1);
+  var player2Choose = _.bind(player2.choose, player2);
+
+  var playerKeyMap = {
+    // player 1 keys
+    81: _.partial(player1Choose, 0),
+    87: _.partial(player1Choose, 1),
+    69: _.partial(player1Choose, 2),
+    82: _.partial(player1Choose, 3),
+    65: _.partial(player1Choose, 4),
+    83: _.partial(player1Choose, 5),
+    68: _.partial(player1Choose, 6),
+    70: _.partial(player1Choose, 7),
+
+    // player 2 keys
+    85: _.partial(player2Choose, 0),
+    73: _.partial(player2Choose, 1),
+    79: _.partial(player2Choose, 2),
+    80: _.partial(player2Choose, 3),
+    74: _.partial(player2Choose, 4),
+    75: _.partial(player2Choose, 5),
+    76: _.partial(player2Choose, 6),
+    186: _.partial(player2Choose, 7)
   }
 
-  if ( _(Object.keys(player2KeyMap)).contains(event.keyCode.toString()) ) {
-    var key = player2KeyMap[event.keyCode];
-    if(key === 'U') {
-      player2.choose(0);
-    } else if (key === 'I') {
-      player2.choose(1);
-    } else if (key === 'O') {
-      player2.choose(2);
-    } else if (key === 'P') {
-      player2.choose(3);
-    }
-  }
+  // Choose the ingredient
+  playerKeyMap[event.keyCode]();
 }
 
 module.exports = PlayScene;
