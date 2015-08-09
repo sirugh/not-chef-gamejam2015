@@ -11,10 +11,6 @@ var keyboard;
 
 var sprite;
 var players = [];
-var foodItems = [
-  ["plate1", "plate2"],
-  ["plate3", "plate4"]
-];
 
 var pauseMenu;
 var PlayScene = {
