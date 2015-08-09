@@ -98,6 +98,14 @@ var PlayScene = {
     // Set up player visual inventory
     var self = this;
     var sprite;
+
+    var labelMap = {
+      0: ['Q', 'U'],
+      1: ['W', 'I'],
+      2: ['E', 'O'],
+      3: ['R', 'P']
+    }
+
     players[0].inventory.forEach(function(food, i) {
       sprite = food.sprite;
       // create sprite
@@ -105,7 +113,8 @@ var PlayScene = {
       sprite.y = i * sprite.height + self.world.height/2;
 
       // create label
-      var label = self.game.add.text(-30, -sprite.height/2, '#');
+      var labelText = labelMap[i][0];
+      var label = self.game.add.text(-30, -sprite.height/2, labelText, {fill : '#ff00ff'});
       sprite.addChild(label);
     });
 
@@ -115,7 +124,9 @@ var PlayScene = {
       sprite.y = i * sprite.height + self.world.height/2;
 
       // create label
-      var label = self.game.add.text(10, -sprite.height/2, '#');
+      var labelText = labelMap[i][1];
+      var label = self.game.add.text(10, -sprite.height/2, labelText, {fill : '#0000ff'} );
+      // label.anchor.setTo(0, 0);
       sprite.addChild(label);
     });
 
